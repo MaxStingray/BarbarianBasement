@@ -41,11 +41,16 @@ public class TurnManager : MonoBehaviour
         //remember to put the enemy turn back in later lol
         _turnOrder = new Turn[] { Turn.Player, Turn.Player };
         _turnIterator = 0;
-        CurrentTurn = _turnOrder[_turnIterator];
+
         while (GameManager.Instance.GameReady == false)
         {
             yield return null;
         }
+
+        //one extra frame so the playermanager can catch up
+        yield return null;
+
+        CurrentTurn = _turnOrder[_turnIterator];
         EnterTurn();
     }
 
@@ -55,9 +60,11 @@ public class TurnManager : MonoBehaviour
         {
             case Turn.Player:
                 OnPlayerTurnStart.Invoke();
+                Debug.Log("player's turn");
                 break;
             case Turn.Enemy:
                 OnPlayerTurnStart.Invoke();
+                Debug.Log("enemy turn");
                 break;
         }
     }

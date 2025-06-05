@@ -8,6 +8,8 @@ public class PlayerManager : MonoBehaviour
 
     [SerializeField] private CharacterSheet _character;
 
+    private Coroutine _playerActionCoroutine;
+
     void Awake()
     {
         if (TurnManager.Instance == null)
@@ -24,22 +26,31 @@ public class PlayerManager : MonoBehaviour
     {
         while (TurnManager.Instance == null)
         {
-            Debug.Log("AAA");
             yield return null;
         }
 
+        Debug.Log("turn manager found");
         TurnManager.Instance.OnPlayerTurnStart.AddListener(HandleTurnStart);
     }
 
     private void HandleTurnStart()
     {
+        Debug.Log("player turn start");
         _playerMoved = false;
         _playerUsedAction = false;
-        StartCoroutine(AwaitAction());
+
+        // Stop any existing coroutine
+        if (_playerActionCoroutine != null)
+        {
+            StopCoroutine(_playerActionCoroutine);
+        }
+
+        _playerActionCoroutine = StartCoroutine(AwaitAction());
     }
 
     IEnumerator AwaitAction()
     {
+        Debug.Log("awaiting player input");
         while (!_playerMoved && !_playerUsedAction)
         {
             if (Input.GetKeyDown(KeyCode.D))
@@ -64,6 +75,8 @@ public class PlayerManager : MonoBehaviour
                     if (moved)
                     {
                         _playerMoved = true;
+                        yield return new WaitUntil(() => !Input.GetKey(KeyCode.W));
+                        break;
                     }
                 }
                 else
