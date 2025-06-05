@@ -1,0 +1,83 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &6510639207343420068
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8202598473992268908}
+  - component: {fileID: 6689470085023299317}
+  m_Layer: 0
+  m_Name: Dungen
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8202598473992268908
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6510639207343420068}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -229.26422, y: 87.252655, z: 323.1527}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6689470085023299317
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6510639207343420068}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 51b6d80b10899e446aa5951560bc62f1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _dungeonRoot: {fileID: 0}
+  Rows: 15
+  Cols: 15
+  minRoomSize: 3
+  maxRoomSize: 5
+  _floorTiles:
+  - Prefab: {fileID: 916917378494744782, guid: 98f5378049f9b5745a77677f581b32b1, type: 3}
+    Weight: 70
+    Name: 
+  - Prefab: {fileID: 1378172779303584491, guid: fd2de4bd876f4ac4980370e624362931, type: 3}
+    Weight: 6
+    Name: 
+  - Prefab: {fileID: 916917378494744782, guid: fa683e8f7d20d904c877f3d88f66e66d, type: 3}
+    Weight: 7
+    Name: 
+  - Prefab: {fileID: 916917378494744782, guid: 745bcd0bbd9d79c40b9132142d40845c, type: 3}
+    Weight: 5
+    Name: 
+  - Prefab: {fileID: 916917378494744782, guid: c716abbf7a960934ea8955e67ce8cb86, type: 3}
+    Weight: 8
+    Name: 
+  _wallTiles:
+  - Prefab: {fileID: 7779381877309823848, guid: 2f6c4572e07a60b43b00e1c4f489a806, type: 3}
+    Weight: 40
+    Name: 
+  - Prefab: {fileID: 7779381877309823848, guid: 9499a46e31f51b64894a17827d4e366e, type: 3}
+    Weight: 5
+    Name: 
+  - Prefab: {fileID: 7779381877309823848, guid: 53a05204dff8ac94d87c6a61d30d911c, type: 3}
+    Weight: 40
+    Name: 
+  - Prefab: {fileID: 7779381877309823848, guid: 8741018d1e992204286b6165d4f8cafb, type: 3}
+    Weight: 5
+    Name: 
+  - Prefab: {fileID: 7779381877309823848, guid: 4ce8345110bfdaf42a94ccbe4afb0e00, type: 3}
+    Weight: 5
+    Name: 
