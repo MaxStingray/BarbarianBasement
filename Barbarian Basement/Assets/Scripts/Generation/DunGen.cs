@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
+using UnityEditor;
 
 [System.Serializable]
 public class FloorTile
@@ -26,6 +27,8 @@ public class GameTile
     public bool SouthWall = true;
     public bool EastWall = true;
     public bool WestWall = true;
+    //does this square have a character on it?
+    public bool IsOccupied = false;
 }
 
 public class DunGen : MonoBehaviour
@@ -40,8 +43,12 @@ public class DunGen : MonoBehaviour
 
     private GameTile[,] grid;
 
+    public GameTile[,] Grid => grid;
+
     public Vector3 PlayerSpawnPosition { get; private set; }
+    public GameTile PlayerStartTile { get; private set; }
     public Vector3 StairsPosition { get; private set; }
+    public GameTile StairsTile { get; private set; }
     public bool DungeonGenerated { get; private set; }
 
     [ContextMenu("Generate Dungeon")]
@@ -51,7 +58,6 @@ public class DunGen : MonoBehaviour
         SplitAndCreateRooms();
         InstantiateFloorTiles();
         InstantiateWalls();
-
         DungeonGenerated = true;
     }
 
@@ -128,6 +134,7 @@ public class DunGen : MonoBehaviour
         Vector2Int playerCoords = GetRoomCenter(playerRoom.Room);
         var spawnTilePosition = grid[playerCoords.x, playerCoords.y].Position;
         PlayerSpawnPosition = new Vector3(spawnTilePosition.x, spawnTilePosition.y + 1.7f, spawnTilePosition.z);
+        PlayerStartTile = grid[playerCoords.x, playerCoords.y];
 
         // Pick a different random room for stairs
         BSPNode stairsRoom;
@@ -139,6 +146,26 @@ public class DunGen : MonoBehaviour
 
         Vector2Int stairsCoords = GetRoomCenter(stairsRoom.Room);
         StairsPosition = grid[stairsCoords.x, stairsCoords.y].Position;
+        StairsTile = grid[stairsCoords.x, stairsCoords.y];
+
+        if (!PlayerStartTile.IsFloor)
+        {
+            Debug.LogWarning("PlayerStartTile is not on a floor! Trying to find fallback.");
+            for (int x = 0; x < Rows; x++)
+            {
+                for (int y = 0; y < Cols; y++)
+                {
+                    if (grid[x, y].IsFloor)
+                    {
+                        PlayerStartTile = grid[x, y];
+                        PlayerSpawnPosition = new Vector3(grid[x, y].Position.x, 1.7f, grid[x, y].Position.z);
+                        break;
+                    }
+                }
+            }
+        }
+
+        Debug.Log($"PlayerStartTile assigned: {PlayerStartTile != null}, IsFloor: {PlayerStartTile?.IsFloor}");
     }
 
     private bool SplitNode(BSPNode node)
@@ -195,18 +222,21 @@ public class DunGen : MonoBehaviour
 
     private void PlaceRoom(BSPNode node)
     {
-        // clamp these to make sure they fit inside the node
-        int roomWidth = Mathf.Min(
-            Random.Range(minRoomSize, Mathf.Min(maxRoomSize + 1, node.Area.width)),
-            node.Area.width);
+        int roomWidth = Random.Range(minRoomSize, Mathf.Min(maxRoomSize + 1, node.Area.width));
+        int roomHeight = Random.Range(minRoomSize, Mathf.Min(maxRoomSize + 1, node.Area.height));
 
-        int roomHeight = Mathf.Min(
-            Random.Range(minRoomSize, Mathf.Min(maxRoomSize + 1, node.Area.height)),
-            node.Area.height);
-
-        // guard against overlaps
         int roomX = node.Area.x + Random.Range(0, Mathf.Max(1, node.Area.width - roomWidth + 1));
         int roomY = node.Area.y + Random.Range(0, Mathf.Max(1, node.Area.height - roomHeight + 1));
+
+        // Clamp only if needed
+        if (roomX + roomWidth > Rows)
+        {
+            roomWidth = Rows - roomX;
+        }
+        if (roomY + roomHeight > Cols)
+        {
+            roomHeight = Cols - roomY;
+        }
 
         node.Room = new RectInt(roomX, roomY, roomWidth, roomHeight);
 
@@ -242,9 +272,20 @@ public class DunGen : MonoBehaviour
 
     private Vector2Int GetRoomCenter(RectInt room)
     {
-        int centerX = room.x + room.width / 2;
-        int centerY = room.y + room.height / 2;
-        return new Vector2Int(centerX, centerY);
+        for (int attempt = 0; attempt < 10; attempt++) // Try multiple times just in case
+        {
+            int centerX = room.x + Random.Range(0, room.width);
+            int centerY = room.y + Random.Range(0, room.height);
+            if (grid[centerX, centerY].IsFloor)
+            {
+                return new Vector2Int(centerX, centerY);
+            }
+        }
+
+        // Fallback: just pick the math center even if it's not a floor
+        int fallbackX = room.x + room.width / 2;
+        int fallbackY = room.y + room.height / 2;
+        return new Vector2Int(fallbackX, fallbackY);
     }
 
     #endregion
