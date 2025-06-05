@@ -31,6 +31,15 @@ public class PlayerManager : MonoBehaviour
 
         Debug.Log("turn manager found");
         TurnManager.Instance.OnPlayerTurnStart.AddListener(HandleTurnStart);
+        TurnManager.Instance.OnPlayerTurnEnd.AddListener(HandleTurnEnd);
+    }
+
+    private void HandleTurnEnd()
+    {
+        if (_playerActionCoroutine != null)
+        {
+            StopCoroutine(_playerActionCoroutine);
+        }
     }
 
     private void HandleTurnStart()
@@ -71,11 +80,13 @@ public class PlayerManager : MonoBehaviour
 
                 if (targetTile != null)
                 {
+                    Debug.Log($"CurrentTile: NorthWall: {_character.CurrentTile.NorthWall}");
+                    Debug.Log($"TargetTile: SouthWall: {targetTile.SouthWall}");
                     bool moved = _character.AttemptMove(targetTile);
                     if (moved)
                     {
                         _playerMoved = true;
-                        yield return new WaitUntil(() => !Input.GetKey(KeyCode.W));
+                        //yield return new WaitUntil(() => !Input.GetKey(KeyCode.W));
                         break;
                     }
                 }

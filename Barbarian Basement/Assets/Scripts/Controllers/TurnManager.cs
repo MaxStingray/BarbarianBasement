@@ -95,6 +95,12 @@ public class TurnManager : MonoBehaviour
                 break;
         }
 
+        StartCoroutine(WaitThenEnterNextTurn());
+    }
+
+    IEnumerator WaitThenEnterNextTurn()
+    {
+        yield return new WaitForSeconds(0.1f);
         EnterNextTurn();
     }
 }

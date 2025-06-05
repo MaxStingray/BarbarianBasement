@@ -58,6 +58,22 @@ public class DunGen : MonoBehaviour
         SplitAndCreateRooms();
         InstantiateFloorTiles();
         InstantiateWalls();
+        // Optional: Remove ALL irrelevant walls from corridor tiles
+        for (int x = 0; x < Rows; x++)
+        {
+            for (int y = 0; y < Cols; y++)
+            {
+                if (grid[x, y].IsFloor)
+                {
+                    // Only keep relevant walls for room edges; corridors are open
+                    // Optionally, reset all walls for corridor tiles
+                    grid[x, y].NorthWall = false;
+                    grid[x, y].SouthWall = false;
+                    grid[x, y].EastWall = false;
+                    grid[x, y].WestWall = false;
+                }
+            }
+        }
         DungeonGenerated = true;
     }
 
@@ -133,7 +149,7 @@ public class DunGen : MonoBehaviour
         BSPNode playerRoom = leafNodes[Random.Range(0, leafNodes.Count)];
         Vector2Int playerCoords = GetRoomCenter(playerRoom.Room);
         var spawnTilePosition = grid[playerCoords.x, playerCoords.y].Position;
-        PlayerSpawnPosition = new Vector3(spawnTilePosition.x, spawnTilePosition.y + 1.7f, spawnTilePosition.z);
+        PlayerSpawnPosition = spawnTilePosition;
         PlayerStartTile = grid[playerCoords.x, playerCoords.y];
 
         // Pick a different random room for stairs

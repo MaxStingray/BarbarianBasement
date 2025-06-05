@@ -50,7 +50,7 @@ public abstract class CharacterSheet : MonoBehaviour
             return false;
         }
 
-        if (MoveUtils.CanMoveToTile(targetTile, FacingDirection, GameManager.Instance.FinalGrid))
+        if (MoveUtils.CanMoveToTile(CurrentTile, FacingDirection, GameManager.Instance.FinalGrid))
         {
             CurrentTile.IsOccupied = false;
             CurrentTile = targetTile;
