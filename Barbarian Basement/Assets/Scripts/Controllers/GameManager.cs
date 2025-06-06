@@ -38,6 +38,7 @@ public class GameManager : MonoBehaviour
         _player.gameObject.transform.position = _dungeonGenerator.PlayerSpawnPosition;
         _player.CurrentTile = _dungeonGenerator.PlayerStartTile;
         _dungeonGenerator.PlayerStartTile.IsOccupied = true;
+        _dungeonGenerator.PlayerStartTile.OccupiedBy = _player;
         Debug.Log($"Player starts at grid position with floor: {_player.CurrentTile.IsFloor}");
     }
 

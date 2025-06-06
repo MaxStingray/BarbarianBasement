@@ -41,6 +41,7 @@ public abstract class CharacterSheet : MonoBehaviour
     {
         Debug.Log(characterName + " has perished");
         CurrentTile.IsOccupied = false;
+        CurrentTile.OccupiedBy = null;
     }
 
     public bool AttemptMove(GameTile targetTile)
@@ -54,7 +55,9 @@ public abstract class CharacterSheet : MonoBehaviour
         {
             CurrentTile.IsOccupied = false;
             CurrentTile = targetTile;
+            // set the new tile as occupied and update character info
             CurrentTile.IsOccupied = true;
+            CurrentTile.OccupiedBy = this;
             transform.position = CurrentTile.Position;
             // if we've successfully moved, end the current turn
             TurnManager.Instance.EndTurn();

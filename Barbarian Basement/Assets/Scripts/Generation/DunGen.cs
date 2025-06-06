@@ -29,6 +29,7 @@ public class GameTile
     public bool WestWall = true;
     //does this square have a character on it?
     public bool IsOccupied = false;
+    public CharacterSheet OccupiedBy;
 }
 
 public class DunGen : MonoBehaviour
@@ -186,26 +187,33 @@ public class DunGen : MonoBehaviour
 
     private bool SplitNode(BSPNode node)
     {
+        // Determine if we can split horizontally or vertically
         bool splitHorizontally = Random.value > 0.5f;
 
-        if (node.Area.width > node.Area.height && node.Area.height / node.Area.width >= 0.05f)
-        {
-            splitHorizontally = false;
-        }
-        else if (node.Area.height > node.Area.width && node.Area.width / node.Area.height >= 0.05f)
-        {
-            splitHorizontally = true;
-        }
-
+        // Only allow splitting if both child nodes will be large enough for a room
         if (splitHorizontally)
         {
-            int splitY = Random.Range(minRoomSize, node.Area.height - minRoomSize);
+            if (node.Area.height < minRoomSize * 2)
+                return false; // Can't split safely
+
+            int maxSplitY = node.Area.height - minRoomSize;
+            if (maxSplitY <= minRoomSize)
+                return false;
+
+            int splitY = Random.Range(minRoomSize, maxSplitY);
             node.Left = new BSPNode(new RectInt(node.Area.x, node.Area.y, node.Area.width, splitY));
             node.Right = new BSPNode(new RectInt(node.Area.x, node.Area.y + splitY, node.Area.width, node.Area.height - splitY));
         }
         else
         {
-            int splitX = Random.Range(minRoomSize, node.Area.width - minRoomSize);
+            if (node.Area.width < minRoomSize * 2)
+                return false; // Can't split safely
+
+            int maxSplitX = node.Area.width - minRoomSize;
+            if (maxSplitX <= minRoomSize)
+                return false;
+
+            int splitX = Random.Range(minRoomSize, maxSplitX);
             node.Left = new BSPNode(new RectInt(node.Area.x, node.Area.y, splitX, node.Area.height));
             node.Right = new BSPNode(new RectInt(node.Area.x + splitX, node.Area.y, node.Area.width - splitX, node.Area.height));
         }
@@ -288,19 +296,25 @@ public class DunGen : MonoBehaviour
 
     private Vector2Int GetRoomCenter(RectInt room)
     {
-        for (int attempt = 0; attempt < 10; attempt++) // Try multiple times just in case
+        for (int attempt = 0; attempt < 10; attempt++) // Try multiple times
         {
             int centerX = room.x + Random.Range(0, room.width);
             int centerY = room.y + Random.Range(0, room.height);
-            if (grid[centerX, centerY].IsFloor)
+
+            int safeX = Mathf.Clamp(centerX, 0, Rows - 1);
+            int safeY = Mathf.Clamp(centerY, 0, Cols - 1);
+
+            if (grid[safeX, safeY].IsFloor)
             {
-                return new Vector2Int(centerX, centerY);
+                return new Vector2Int(safeX, safeY);
             }
         }
 
-        // Fallback: just pick the math center even if it's not a floor
+        // Fallback: pick the mathematical center
         int fallbackX = room.x + room.width / 2;
         int fallbackY = room.y + room.height / 2;
+        fallbackX = Mathf.Clamp(fallbackX, 0, Rows - 1);
+        fallbackY = Mathf.Clamp(fallbackY, 0, Cols - 1);
         return new Vector2Int(fallbackX, fallbackY);
     }
 
