@@ -19,6 +19,7 @@ public class PlayerManager : MonoBehaviour
         else
         {
             TurnManager.Instance.OnPlayerTurnStart.AddListener(HandleTurnStart);
+            TurnManager.Instance.OnPlayerTurnEnd.AddListener(HandleTurnEnd);
         }
     }
 
@@ -29,7 +30,6 @@ public class PlayerManager : MonoBehaviour
             yield return null;
         }
 
-        Debug.Log("turn manager found");
         TurnManager.Instance.OnPlayerTurnStart.AddListener(HandleTurnStart);
         TurnManager.Instance.OnPlayerTurnEnd.AddListener(HandleTurnEnd);
     }
@@ -39,6 +39,7 @@ public class PlayerManager : MonoBehaviour
         if (_playerActionCoroutine != null)
         {
             StopCoroutine(_playerActionCoroutine);
+            _playerActionCoroutine = null;
         }
     }
 
@@ -52,6 +53,7 @@ public class PlayerManager : MonoBehaviour
         if (_playerActionCoroutine != null)
         {
             StopCoroutine(_playerActionCoroutine);
+            _playerActionCoroutine = null;
         }
 
         _playerActionCoroutine = StartCoroutine(AwaitAction());
@@ -119,7 +121,6 @@ public class PlayerManager : MonoBehaviour
 
             yield return null;
         }
-
         TurnManager.Instance.EndTurn();
     }
 }

@@ -61,8 +61,6 @@ public abstract class CharacterSheet : MonoBehaviour
             CurrentTile.IsOccupied = true;
             CurrentTile.OccupiedBy = this;
             transform.position = CurrentTile.Position;
-            // if we've successfully moved, end the current turn
-            TurnManager.Instance.EndTurn();
             return true;
         }
 

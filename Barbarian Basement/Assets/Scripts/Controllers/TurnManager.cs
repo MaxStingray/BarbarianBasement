@@ -23,6 +23,7 @@ public class TurnManager : MonoBehaviour
     private Turn[] _turnOrder;
 
     private int _turnIterator = 0;
+    private bool _turnEnding = false;
 
 
     void Awake()
@@ -38,8 +39,7 @@ public class TurnManager : MonoBehaviour
     IEnumerator Start()
     {
         //establish the turn order (hardcoded for now)
-        //remember to put the enemy turn back in later lol
-        _turnOrder = new Turn[] { Turn.Player, Turn.Player };
+        _turnOrder = new Turn[] { Turn.Player, Turn.Enemy };
         _turnIterator = 0;
 
         while (GameManager.Instance.GameReady == false)
@@ -59,12 +59,12 @@ public class TurnManager : MonoBehaviour
         switch (_turnOrder[_turnIterator])
         {
             case Turn.Player:
-                OnPlayerTurnStart.Invoke();
                 Debug.Log("player's turn");
+                OnPlayerTurnStart.Invoke();
                 break;
             case Turn.Enemy:
-                OnPlayerTurnStart.Invoke();
                 Debug.Log("enemy turn");
+                OnEnemyTurnStart.Invoke();
                 break;
         }
     }
@@ -83,14 +83,19 @@ public class TurnManager : MonoBehaviour
 
     public void EndTurn()
     {
+        if (_turnEnding)
+        {
+            return;
+        }
+
+        _turnEnding = true;
+
         switch (CurrentTurn)
         {
             case Turn.Player:
-                Debug.Log("player's turn");
                 OnPlayerTurnEnd.Invoke();
                 break;
             case Turn.Enemy:
-                Debug.Log("enemy turn");
                 OnEnemyTurnEnd.Invoke();
                 break;
         }
@@ -101,6 +106,7 @@ public class TurnManager : MonoBehaviour
     IEnumerator WaitThenEnterNextTurn()
     {
         yield return new WaitForSeconds(0.1f);
+        _turnEnding = false;
         EnterNextTurn();
     }
 }

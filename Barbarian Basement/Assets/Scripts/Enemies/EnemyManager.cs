@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Collections;
 using UnityEngine;
 
 [System.Serializable]
@@ -14,7 +15,83 @@ public class EnemyManager : MonoBehaviour
     [SerializeField] private int numberOfEnemies = 5;
     [SerializeField] private EnemyPrefab[] enemyPrefabs;
 
-    private List<CharacterSheet> spawnedEnemies = new List<CharacterSheet>();
+    private List<Enemy> spawnedEnemies = new List<Enemy>();
+
+    private Coroutine _enemyStateCheck;
+
+    private bool _enemyTurnEnding;
+
+    void Awake()
+    {
+        if (TurnManager.Instance == null)
+        {
+            StartCoroutine(ValidateTurnManager());
+        }
+        else
+        {
+            TurnManager.Instance.OnEnemyTurnStart.AddListener(HandleTurnStart);
+        }
+    }
+
+    IEnumerator ValidateTurnManager()
+    {
+        while (TurnManager.Instance == null)
+        {
+            yield return null;
+        }
+
+        TurnManager.Instance.OnEnemyTurnStart.AddListener(HandleTurnStart);
+        TurnManager.Instance.OnEnemyTurnEnd.AddListener(HandleTurnEnd);
+    }
+
+    private void HandleTurnStart()
+    {
+        Debug.Log("handling enemy turn start");
+        if (_enemyStateCheck != null)
+        {
+            StopCoroutine(_enemyStateCheck);
+            _enemyStateCheck = null;
+        }
+        _enemyStateCheck = StartCoroutine(TurnStartSequence());
+    }
+
+    private IEnumerator TurnStartSequence()
+    {
+        _enemyTurnEnding = false;
+
+        foreach (var enemy in spawnedEnemies)
+        {
+            if (!enemy.IsDead) // exclude dead enemies from the checks
+            {
+                if (CombatUtils.HasLineOfSight(enemy.CurrentTile, GameManager.Instance.Player.CurrentTile, GameManager.Instance.FinalGrid))
+                {
+                    enemy.State = EnemyStates.Persuing;
+                    Debug.Log($"{enemy.CharacterName} is persuing {GameManager.Instance.Player.CharacterName}");
+                    yield return StartCoroutine(enemy.PersuePlayer());
+                    yield return null;
+                }
+                else
+                {
+                    enemy.State = EnemyStates.Idle;
+                    yield return null;
+                }
+            }
+        }
+        if (!_enemyTurnEnding)
+        {
+            _enemyTurnEnding = true;
+            TurnManager.Instance.EndTurn();
+        }
+    }
+
+    private void HandleTurnEnd()
+    {
+        if (_enemyStateCheck != null)
+        {
+            StopCoroutine(_enemyStateCheck);
+            _enemyStateCheck = null;
+        }
+    }
 
     public void SpawnEnemies(GameTile[,] grid)
     {
@@ -36,7 +113,7 @@ public class EnemyManager : MonoBehaviour
             }
 
             GameObject enemyGO = Instantiate(enemyPrefab, spawnTile.Position, Quaternion.identity);
-            CharacterSheet enemy = enemyGO.GetComponent<CharacterSheet>();
+            Enemy enemy = enemyGO.GetComponent<Enemy>();
             if (enemy == null)
             {
                 Debug.LogError($"Enemy prefab {enemyPrefab.name} missing CharacterSheet component!");

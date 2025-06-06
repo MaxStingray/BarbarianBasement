@@ -21,7 +21,11 @@ public class WallTile
 [System.Serializable]
 public class GameTile
 {
+    //position in world space
     public Vector3 Position;
+    //grid coordinates
+    public int x;
+    public int y;
     public bool IsFloor = false;
     public bool NorthWall = true;
     public bool SouthWall = true;
@@ -85,8 +89,15 @@ public class DunGen : MonoBehaviour
         {
             for (int y = 0; y < Cols; y++)
             {
+                //set world space position
                 Vector3 pos = new Vector3(_dungeonRoot.position.x + (x * 4), 0, _dungeonRoot.position.z + (y * 4));
-                grid[x, y] = new GameTile { Position = pos };
+                //create the tile and assign the coordinates
+                grid[x, y] = new GameTile
+                {
+                    Position = pos,
+                    x = x,
+                    y = y
+                };
             }
         }
     }
