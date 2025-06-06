@@ -63,7 +63,16 @@ public class EnemyManager : MonoBehaviour
         {
             if (!enemy.IsDead) // exclude dead enemies from the checks
             {
-                if (CombatUtils.HasLineOfSight(enemy.CurrentTile, GameManager.Instance.Player.CurrentTile, GameManager.Instance.FinalGrid))
+                Direction adjacentDirection;
+
+                bool isNextToTarget = MoveUtils.TargetTileReached(enemy.CurrentTile, GameManager.Instance.Player.CurrentTile, GameManager.Instance.FinalGrid, out adjacentDirection);
+                //first check if the enemy is next to the player
+                if (isNextToTarget)
+                {
+                    Debug.Log($"{enemy.CharacterName} reached target");
+                    enemy.State = EnemyStates.Attacking;
+                } //otherwise check if line of sight is established
+                else if (CombatUtils.HasLineOfSight(enemy.CurrentTile, GameManager.Instance.Player.CurrentTile, GameManager.Instance.FinalGrid))
                 {
                     enemy.State = EnemyStates.Persuing;
                     Debug.Log($"{enemy.CharacterName} is persuing {GameManager.Instance.Player.CharacterName}");

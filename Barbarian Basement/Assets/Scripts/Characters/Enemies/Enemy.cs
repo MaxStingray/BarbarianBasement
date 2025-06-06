@@ -51,7 +51,7 @@ public class Enemy : CharacterSheet
 
         // Decide next step
         Vector2Int delta = playerPos - enemyPos;
-        Direction bestDir = Direction.North;
+        Direction bestDir;
 
         if (Mathf.Abs(delta.x) > Mathf.Abs(delta.y))
             bestDir = delta.x > 0 ? Direction.East : Direction.West;
@@ -62,36 +62,56 @@ public class Enemy : CharacterSheet
 
         if (targetTile != null && !targetTile.IsOccupied && MoveUtils.CanMoveToTile(CurrentTile, bestDir, GameManager.Instance.FinalGrid))
         {
-            // Assume CurrentDirection is a Direction enum
             if (FacingDirection != bestDir)
             {
-                // decide whether to turn clockwise or anticlockwise
-                // so we can reach bestDir in the fewest steps.
-
-                // Directions in enum order: North, East, South, West
-                int currentIndex = (int)FacingDirection;
-                int targetIndex = (int)bestDir;
-
-                // Calculate difference clockwise and counterclockwise
-                int clockwiseSteps = (targetIndex - currentIndex + 4) % 4;
-                int anticlockwiseSteps = (currentIndex - targetIndex + 4) % 4;
-
-                // Choose the shortest rotation direction
-                bool clockwise = clockwiseSteps <= anticlockwiseSteps;
-
-                Turn(clockwise);
+                yield return StartCoroutine(TurnToTargetDirection(bestDir));
             }
-            else
+
+            // We're facing the correct direction!
+            if (targetTile != null && !targetTile.IsOccupied && MoveUtils.CanMoveToTile(CurrentTile, bestDir, GameManager.Instance.FinalGrid))
             {
-                // We're facing the correct direction!
-                if (targetTile != null && !targetTile.IsOccupied && MoveUtils.CanMoveToTile(CurrentTile, bestDir, GameManager.Instance.FinalGrid))
-                {
-                    AttemptMove(targetTile);
-                }
+                AttemptMove(targetTile);
             }
         }
 
-        yield return new WaitForSeconds(0.5f);
+        //at the end of this persue phase, check if we reached the target
+        Direction requiredDirectionIfReachedTarget;
+
+        if (MoveUtils.TargetTileReached(CurrentTile, GameManager.Instance.Player.CurrentTile, GameManager.Instance.FinalGrid, out requiredDirectionIfReachedTarget))
+        {
+            yield return StartCoroutine(TurnToTargetDirection(requiredDirectionIfReachedTarget));
+        }
+
+        yield return null;
+    }
+
+    public IEnumerator TurnToTargetDirection(Direction targetDirection)
+    {
+        // decide whether to turn clockwise or anticlockwise
+        // so we can reach bestDir in the fewest steps.
+        // Directions in enum order: North, East, South, West
+        int currentIndex = (int)FacingDirection;
+        int targetIndex = (int)targetDirection;
+
+        // Calculate difference clockwise and counterclockwise
+        int clockwiseSteps = (targetIndex - currentIndex + 4) % 4;
+        int anticlockwiseSteps = (currentIndex - targetIndex + 4) % 4;
+
+        // Choose the shortest rotation direction
+        bool clockwise = clockwiseSteps <= anticlockwiseSteps;
+
+        // turn until we reach the required direction
+        while (FacingDirection != targetDirection)
+        {
+            Turn(clockwise);
+
+            yield return null;
+        }
+    }
+
+    public IEnumerator AttackPlayer()
+    {
+        yield return null;
     }
     
 }

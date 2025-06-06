@@ -94,8 +94,6 @@ public abstract class CharacterSheet : MonoBehaviour
                 break;
         }
 
-        Debug.Log("Direction: " + FacingDirection.ToString());
-
         UpdateRotation();
     }
     

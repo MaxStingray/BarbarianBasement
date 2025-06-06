@@ -82,8 +82,6 @@ public class PlayerManager : MonoBehaviour
 
                 if (targetTile != null)
                 {
-                    Debug.Log($"CurrentTile: NorthWall: {_character.CurrentTile.NorthWall}");
-                    Debug.Log($"TargetTile: SouthWall: {targetTile.SouthWall}");
                     bool moved = _character.AttemptMove(targetTile);
                     if (moved)
                     {

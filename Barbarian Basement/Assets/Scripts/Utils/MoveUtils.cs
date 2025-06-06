@@ -1,3 +1,5 @@
+using System.IO.Compression;
+using Unity.Collections;
 using UnityEngine;
 
 public enum Direction
@@ -59,6 +61,70 @@ public static class MoveUtils
             default:
                 return false;
         }
+    }
+
+    public static bool TargetTileReached(GameTile currentTile, GameTile targetTile, GameTile[,] grid, out Direction requiredDirection)
+    {
+        int maxX = grid.GetLength(0);
+        int maxY = grid.GetLength(1);
+
+        int currentX = currentTile.x;
+        int currentY = currentTile.y;
+
+        // Direction definitions (corrected)
+        (int dx, int dy, Direction dir)[] directions = new[]
+        {
+            (0, 1, Direction.North),    // Up
+            (0, -1, Direction.South),   // Down
+            (1, 0, Direction.East),     // Right
+            (-1, 0, Direction.West)     // Left
+        };
+
+        foreach (var (dx, dy, dir) in directions)
+        {
+            int newX = currentX + dx;
+            int newY = currentY + dy;
+
+            // Bounds check
+            if (newX >= 0 && newX < maxX && newY >= 0 && newY < maxY)
+            {
+                if (targetTile == grid[newX, newY])
+                {
+                    requiredDirection = dir;
+
+                    if (!IsTileBlockedByWall(targetTile, requiredDirection))
+                    {
+                        return true;
+                    }
+                }
+            }
+        }
+
+        requiredDirection = Direction.North; // default fallback
+        return false;
+    }
+
+    /// <summary>
+    /// is an adjacent tile blocked by a wall?
+    /// </summary>
+    /// <param name="targetTile"></param>
+    /// <param name="direction"></param>
+    /// <returns></returns>
+    public static bool IsTileBlockedByWall(GameTile targetTile, Direction direction)
+    {
+        switch (direction)
+        {
+            case Direction.North:
+                return targetTile.SouthWall;  // blocked if there's a south wall on the target tile
+            case Direction.South:
+                return targetTile.NorthWall;  // blocked if there's a north wall on the target tile
+            case Direction.East:
+                return targetTile.WestWall;   // blocked if there's a west wall on the target tile
+            case Direction.West:
+                return targetTile.EastWall;   // blocked if there's an east wall on the target tile
+        }
+
+        return false;
     }
 
     /// <summary>
