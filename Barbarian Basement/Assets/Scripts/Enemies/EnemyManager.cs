@@ -71,6 +71,7 @@ public class EnemyManager : MonoBehaviour
                 {
                     Debug.Log($"{enemy.CharacterName} reached target");
                     enemy.State = EnemyStates.Attacking;
+                    yield return StartCoroutine(enemy.AttackPlayer());
                 } //otherwise check if line of sight is established
                 else if (CombatUtils.HasLineOfSight(enemy.CurrentTile, GameManager.Instance.Player.CurrentTile, GameManager.Instance.FinalGrid))
                 {

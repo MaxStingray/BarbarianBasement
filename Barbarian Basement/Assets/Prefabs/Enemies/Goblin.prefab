@@ -46,7 +46,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   characterName: Goblin
-  BodyPoints: 1
+  BodyPoints: 8
   DefendDice: 1
   AttackDice: 2
   names:
@@ -57,6 +57,7 @@ MonoBehaviour:
   - Skrunk
   - Bash
   - Thunk
+  animator: {fileID: 5845173162692431947}
 --- !u!1 &8185812931542409118
 GameObject:
   m_ObjectHideFlags: 0
@@ -143,7 +144,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8621575989863660144, guid: f3f26804650d6ff4bbb724bb568ae6de, type: 3}
       propertyPath: m_Enabled
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -153,5 +154,10 @@ PrefabInstance:
 --- !u!4 &2243035055243310016 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4150942083692583419, guid: f3f26804650d6ff4bbb724bb568ae6de, type: 3}
+  m_PrefabInstance: {fileID: 2791043930185132603}
+  m_PrefabAsset: {fileID: 0}
+--- !u!95 &5845173162692431947 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 8621575989863660144, guid: f3f26804650d6ff4bbb724bb568ae6de, type: 3}
   m_PrefabInstance: {fileID: 2791043930185132603}
   m_PrefabAsset: {fileID: 0}

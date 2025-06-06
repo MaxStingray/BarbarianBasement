@@ -17,6 +17,8 @@ public class Enemy : CharacterSheet
 
     public bool IsDead { get; private set; }
 
+    [SerializeField] protected Animator animator;
+
     protected override void Awake()
     {
         base.Awake();
@@ -111,6 +113,16 @@ public class Enemy : CharacterSheet
 
     public IEnumerator AttackPlayer()
     {
+        var attackTargetTile = MoveUtils.GetTargetTile(CurrentTile,
+            FacingDirection, GameManager.Instance.FinalGrid);
+
+        //if there is a valid tile and something is standing on it
+        if (attackTargetTile != null && attackTargetTile.IsOccupied)
+        {
+            //attack the target
+            var target = attackTargetTile.OccupiedBy;
+            CombatUtils.Attack(this, target);
+        }
         yield return null;
     }
     
