@@ -45,7 +45,6 @@ public class PlayerManager : MonoBehaviour
 
     private void HandleTurnStart()
     {
-        Debug.Log("player turn start");
         _playerMoved = false;
         _playerUsedAction = false;
 
@@ -61,7 +60,6 @@ public class PlayerManager : MonoBehaviour
 
     IEnumerator AwaitAction()
     {
-        Debug.Log("awaiting player input");
         while (!_playerMoved && !_playerUsedAction)
         {
             if (Input.GetKeyDown(KeyCode.D))

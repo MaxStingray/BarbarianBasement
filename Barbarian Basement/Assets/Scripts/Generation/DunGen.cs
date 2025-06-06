@@ -192,8 +192,6 @@ public class DunGen : MonoBehaviour
                 }
             }
         }
-
-        Debug.Log($"PlayerStartTile assigned: {PlayerStartTile != null}, IsFloor: {PlayerStartTile?.IsFloor}");
     }
 
     private bool SplitNode(BSPNode node)

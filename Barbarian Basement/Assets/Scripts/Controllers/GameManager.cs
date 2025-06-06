@@ -45,7 +45,6 @@ public class GameManager : MonoBehaviour
         _dungeonGenerator.PlayerStartTile.OccupiedBy = _player;
         //spawn enemies
         _enemyManager.SpawnEnemies(FinalGrid);
-        Debug.Log($"Player starts at grid position with floor: {_player.CurrentTile.IsFloor}");
     }
 
     private bool ValidateGameReady()

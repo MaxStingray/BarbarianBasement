@@ -47,18 +47,8 @@ public class Enemy : CharacterSheet
 
     public IEnumerator PersuePlayer()
     {
-        var playerTile = GameManager.Instance.Player.CurrentTile;
-        Vector2Int enemyPos = new Vector2Int(CurrentTile.x, CurrentTile.y);
-        Vector2Int playerPos = new Vector2Int(playerTile.x, playerTile.y);
-
         // Decide next step
-        Vector2Int delta = playerPos - enemyPos;
-        Direction bestDir;
-
-        if (Mathf.Abs(delta.x) > Mathf.Abs(delta.y))
-            bestDir = delta.x > 0 ? Direction.East : Direction.West;
-        else
-            bestDir = delta.y > 0 ? Direction.North : Direction.South;
+        Direction bestDir = DeterminePlayerDirection();
 
         GameTile targetTile = MoveUtils.GetTargetTile(CurrentTile, bestDir, GameManager.Instance.FinalGrid);
 
@@ -87,6 +77,25 @@ public class Enemy : CharacterSheet
         yield return null;
     }
 
+    /// <summary>
+    /// determines the direction needed to face the player
+    /// </summary>
+    /// <returns></returns>
+    private Direction DeterminePlayerDirection()
+    {
+        var playerTile = GameManager.Instance.Player.CurrentTile;
+        Vector2Int enemyPos = new Vector2Int(CurrentTile.x, CurrentTile.y);
+        Vector2Int playerPos = new Vector2Int(playerTile.x, playerTile.y);
+
+        // Decide next step
+        Vector2Int delta = playerPos - enemyPos;
+
+        if (Mathf.Abs(delta.x) > Mathf.Abs(delta.y))
+            return delta.x > 0 ? Direction.East : Direction.West;
+        else
+            return delta.y > 0 ? Direction.North : Direction.South;
+    }
+
     public IEnumerator TurnToTargetDirection(Direction targetDirection)
     {
         // decide whether to turn clockwise or anticlockwise
@@ -113,16 +122,19 @@ public class Enemy : CharacterSheet
 
     public IEnumerator AttackPlayer()
     {
-        var attackTargetTile = MoveUtils.GetTargetTile(CurrentTile,
-            FacingDirection, GameManager.Instance.FinalGrid);
+        //double check we're facing the right direction when we're in a square adjacent to the player
+        Direction bestDir = DeterminePlayerDirection();
 
-        //if there is a valid tile and something is standing on it
-        if (attackTargetTile != null && attackTargetTile.IsOccupied)
+        if (FacingDirection != bestDir)
         {
-            //attack the target
-            var target = attackTargetTile.OccupiedBy;
-            CombatUtils.Attack(this, target);
+            yield return StartCoroutine(TurnToTargetDirection(bestDir));
         }
+        
+        //since we already verified that we're next to the player, there's no need to get the tile data
+        var target = GameManager.Instance.Player;
+
+        CombatUtils.Attack(this, target);
+        
         yield return null;
     }
     

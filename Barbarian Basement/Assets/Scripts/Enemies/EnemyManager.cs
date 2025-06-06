@@ -46,7 +46,6 @@ public class EnemyManager : MonoBehaviour
 
     private void HandleTurnStart()
     {
-        Debug.Log("handling enemy turn start");
         if (_enemyStateCheck != null)
         {
             StopCoroutine(_enemyStateCheck);
