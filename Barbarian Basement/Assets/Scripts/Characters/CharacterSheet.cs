@@ -13,10 +13,12 @@ public abstract class CharacterSheet : MonoBehaviour
 
     [SerializeField] protected string characterName;
 
+    public string CharacterName => characterName;
+
     //Basic stats (yeah it's HeroQuest)
     [SerializeField] protected int BodyPoints = 8;
-    [SerializeField] protected int DefendDice = 2;
-    [SerializeField] protected int AttackDice = 3;
+    [SerializeField] public int DefendDice = 2;
+    [SerializeField] public int AttackDice = 3;
 
     protected int CurrentBodyPoints;
 
@@ -64,7 +66,15 @@ public abstract class CharacterSheet : MonoBehaviour
             return true;
         }
 
-        Debug.Log(characterName + " is blocked by wall or obstacle");
+        if (targetTile.IsOccupied)
+        {
+            Debug.Log(characterName + " is blocked by " + targetTile.OccupiedBy.characterName);
+        }
+        else
+        {
+            Debug.Log(characterName + " is blocked by wall or obstacle");
+        }
+
         return false;
     }
 

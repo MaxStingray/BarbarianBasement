@@ -316,6 +316,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _dungeonGenerator: {fileID: 1237725892}
   _player: {fileID: 454246798}
+  _enemyManager: {fileID: 578071123}
 --- !u!4 &435853330
 Transform:
   m_ObjectHideFlags: 0
@@ -331,6 +332,7 @@ Transform:
   m_Children:
   - {fileID: 1966806153}
   - {fileID: 381884456}
+  - {fileID: 578071124}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &454246798 stripped
@@ -344,6 +346,55 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f0df569c004e6204b84f1893a46df966, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &578071122
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 578071124}
+  - component: {fileID: 578071123}
+  m_Layer: 0
+  m_Name: EnemyManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &578071123
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 578071122}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0bbb995074c5f904b8ca42dc8ee29c6a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  numberOfEnemies: 10
+  enemyPrefabs:
+  - Prefab: {fileID: 6655435428734971706, guid: cf0255ac8d3046645868bec04075978d, type: 3}
+    Weight: 100
+    Name: Goblin
+--- !u!4 &578071124
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 578071122}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 435853330}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1237725892 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 6689470085023299317, guid: 2c02b856e1274ed48ba422a9dbf46fc7, type: 3}
@@ -456,11 +507,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6689470085023299317, guid: 2c02b856e1274ed48ba422a9dbf46fc7, type: 3}
       propertyPath: Cols
-      value: 30
+      value: 100
       objectReference: {fileID: 0}
     - target: {fileID: 6689470085023299317, guid: 2c02b856e1274ed48ba422a9dbf46fc7, type: 3}
       propertyPath: Rows
-      value: 30
+      value: 100
       objectReference: {fileID: 0}
     - target: {fileID: 6689470085023299317, guid: 2c02b856e1274ed48ba422a9dbf46fc7, type: 3}
       propertyPath: _dungeonRoot

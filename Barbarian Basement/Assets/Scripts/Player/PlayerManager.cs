@@ -96,6 +96,27 @@ public class PlayerManager : MonoBehaviour
                 }
             }
 
+            if (Input.GetKeyDown(KeyCode.Space))
+            {
+                //get the next tile
+                var attackTargetTile = MoveUtils.GetTargetTile(_character.CurrentTile,
+                    _character.FacingDirection, GameManager.Instance.FinalGrid);
+
+                //if there is a valid tile and something is standing on it
+                if (attackTargetTile != null && attackTargetTile.IsOccupied)
+                {
+                    //attack the target
+                    var target = attackTargetTile.OccupiedBy;
+                    CombatUtils.Attack(_character, target);
+                    _playerUsedAction = true;
+                    break;
+                }
+                else
+                {
+                    Debug.Log("no valid target");
+                }
+            }
+
             yield return null;
         }
 
