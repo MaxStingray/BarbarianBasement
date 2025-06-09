@@ -1,3 +1,5 @@
+using System.Collections;
+using Mono.Cecil.Cil;
 using UnityEngine;
 
 /// <summary>
@@ -55,12 +57,13 @@ public abstract class CharacterSheet : MonoBehaviour
 
         if (MoveUtils.CanMoveToTile(CurrentTile, FacingDirection, GameManager.Instance.FinalGrid))
         {
+            var previousPosition = CurrentTile.Position;
             CurrentTile.IsOccupied = false;
             CurrentTile = targetTile;
             // set the new tile as occupied and update character info
             CurrentTile.IsOccupied = true;
             CurrentTile.OccupiedBy = this;
-            transform.position = CurrentTile.Position;
+            StartCoroutine(Slide(previousPosition, CurrentTile.Position, 0.2f));
             return true;
         }
 
@@ -74,6 +77,22 @@ public abstract class CharacterSheet : MonoBehaviour
         }
 
         return false;
+    }
+
+    private IEnumerator Slide(Vector3 previousPosition, Vector3 newPosition, float duration)
+    {
+        float currentTime = 0;
+
+        while (currentTime <= duration)
+        {
+            currentTime += Time.deltaTime;
+
+            float percent = currentTime / duration;
+
+            transform.position = Vector3.Lerp(previousPosition, newPosition, percent);
+
+            yield return null;
+        }
     }
 
     public void Turn(bool clockwise)
