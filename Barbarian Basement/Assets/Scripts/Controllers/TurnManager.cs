@@ -60,6 +60,9 @@ public class TurnManager : MonoBehaviour
         {
             case Turn.Player:
                 Debug.Log("player's turn");
+                //update stats panel on player turn start
+                //might not be the best place for this
+                GameManager.Instance.StatsPanel.UpdateStatsPanel(GameManager.Instance.Player);
                 OnPlayerTurnStart.Invoke();
                 break;
             case Turn.Enemy:

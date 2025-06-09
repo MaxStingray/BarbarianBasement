@@ -20,7 +20,7 @@ public abstract class CharacterSheet : MonoBehaviour
     [SerializeField] public int DefendDice = 2;
     [SerializeField] public int AttackDice = 3;
 
-    protected int CurrentBodyPoints;
+    public int CurrentBodyPoints { get; private set; }
 
     protected virtual void Awake()
     {
