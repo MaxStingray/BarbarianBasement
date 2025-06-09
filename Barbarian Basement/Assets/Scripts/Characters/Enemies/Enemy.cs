@@ -139,11 +139,20 @@ public class Enemy : CharacterSheet
 
         //since we already verified that we're next to the player, there's no need to get the tile data
         var target = GameManager.Instance.Player;
+        //play the attack animation
+        AnimationUtils.ValidateAnimationAndPlay(animator, "Attack");
+        //wait for it to finish
+        yield return AnimationUtils.AwaitAnimationComplete(animator, "Attack");
 
         CombatUtils.Attack(this, target);
 
+        //return to idle
+        AnimationUtils.ValidateAnimationAndPlay(animator, "Idle");
+
         yield return null;
     }
+
+    
 
     public bool PursueFinished()
     {

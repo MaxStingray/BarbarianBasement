@@ -559,7 +559,10 @@ MonoBehaviour:
   numberOfEnemies: 10
   enemyPrefabs:
   - Prefab: {fileID: 6655435428734971706, guid: cf0255ac8d3046645868bec04075978d, type: 3}
-    Weight: 100
+    Weight: 50
+    Name: Goblin
+  - Prefab: {fileID: 7161265571872422142, guid: 60614bd3a1035264b8b9b5e16fb92b58, type: 3}
+    Weight: 50
     Name: Goblin
 --- !u!4 &578071124
 Transform:

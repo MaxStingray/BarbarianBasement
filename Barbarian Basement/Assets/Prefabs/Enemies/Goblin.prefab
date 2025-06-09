@@ -46,9 +46,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   characterName: Goblin
-  BodyPoints: 8
+  BodyPoints: 1
   DefendDice: 1
   AttackDice: 2
+  movementSquares: 10
   names:
   - Grizz
   - Scab
