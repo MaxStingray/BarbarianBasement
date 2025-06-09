@@ -24,6 +24,8 @@ public abstract class CharacterSheet : MonoBehaviour
 
     public int CurrentBodyPoints { get; private set; }
 
+    private Coroutine _rotationCoroutine;
+
     protected virtual void Awake()
     {
         CurrentBodyPoints = BodyPoints;
@@ -118,25 +120,41 @@ public abstract class CharacterSheet : MonoBehaviour
     
     private void UpdateRotation()
     {
-        // We'll assume y-axis rotation only
-        float yRotation = 0f;
+        float yRotation = GetYRotationForDirection(FacingDirection);
 
-        switch (FacingDirection)
+        if (_rotationCoroutine != null)
         {
-            case Direction.North:
-                yRotation = 0f;
-                break;
-            case Direction.East:
-                yRotation = 90f;
-                break;
-            case Direction.South:
-                yRotation = 180f;
-                break;
-            case Direction.West:
-                yRotation = 270f;
-                break;
+            StopCoroutine(_rotationCoroutine);
         }
 
-        transform.rotation = Quaternion.Euler(0f, yRotation, 0f);
+        _rotationCoroutine = StartCoroutine(SmoothRotate(yRotation, 0.2f));
+    }
+
+    private float GetYRotationForDirection(Direction direction)
+    {
+        switch (direction)
+        {
+            case Direction.North: return 0f;
+            case Direction.East: return 90f;
+            case Direction.South: return 180f;
+            case Direction.West: return 270f;
+            default: return 0f;
+        }
+    }
+
+    private IEnumerator SmoothRotate(float targetYRotation, float duration)
+    {
+        Quaternion initialRotation = transform.rotation;
+        Quaternion targetRotation = Quaternion.Euler(0f, targetYRotation, 0f);
+
+        float currentTime = 0f;
+        while (currentTime < duration)
+        {
+            transform.rotation = Quaternion.Slerp(initialRotation, targetRotation, currentTime / duration);
+            currentTime += Time.deltaTime;
+            yield return null;
+        }
+
+        transform.rotation = targetRotation;
     }
 }
