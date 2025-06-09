@@ -1,4 +1,5 @@
 using System.Collections;
+using Unity.VisualScripting;
 using UnityEngine;
 [System.Serializable]
 public enum EnemyStates
@@ -45,6 +46,7 @@ public class Enemy : CharacterSheet
     protected override void Die()
     {
         base.Die();
+        AnimationUtils.ValidateAnimationAndPlay(animator, "Die");
         IsDead = true;
     }
 
@@ -132,6 +134,8 @@ public class Enemy : CharacterSheet
         {
             yield return StartCoroutine(TurnToTargetDirection(bestDir));
         }
+
+        yield return new WaitForSeconds(CombatUtils.CombatTurnStartDelay);
 
         //since we already verified that we're next to the player, there's no need to get the tile data
         var target = GameManager.Instance.Player;

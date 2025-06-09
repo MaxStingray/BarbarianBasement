@@ -5,6 +5,7 @@ using UnityEngine;
 /// </summary>
 public static class CombatUtils
 {
+    public static float CombatTurnStartDelay = 1f;
     public static void Attack(CharacterSheet attacker, CharacterSheet target)
     {
         //attacker rolls attack die

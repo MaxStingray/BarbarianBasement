@@ -107,6 +107,7 @@ public class PlayerManager : MonoBehaviour
                     var target = attackTargetTile.OccupiedBy;
                     CombatUtils.Attack(_character, target);
                     _playerUsedAction = true;
+                    yield return new WaitForSeconds(CombatUtils.CombatTurnStartDelay);
                     break;
                 }
                 else
