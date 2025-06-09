@@ -60,38 +60,100 @@ public class EnemyManager : MonoBehaviour
 
         foreach (var enemy in spawnedEnemies)
         {
-            if (!enemy.IsDead) // exclude dead enemies from the checks
+            if (enemy.IsDead)
             {
-                Direction adjacentDirection;
-
-                bool isNextToTarget = MoveUtils.TargetTileReached(enemy.CurrentTile, GameManager.Instance.Player.CurrentTile, GameManager.Instance.FinalGrid, out adjacentDirection);
-                //first check if the enemy is next to the player
-                if (isNextToTarget)
-                {
-                    Debug.Log($"{enemy.CharacterName} reached target");
-                    enemy.State = EnemyStates.Attacking;
-                    yield return StartCoroutine(enemy.AttackPlayer());
-                } //otherwise check if line of sight is established
-                else if (CombatUtils.HasLineOfSight(enemy.CurrentTile, GameManager.Instance.Player.CurrentTile, GameManager.Instance.FinalGrid))
-                {
-                    enemy.State = EnemyStates.Persuing;
-                    Debug.Log($"{enemy.CharacterName} is persuing {GameManager.Instance.Player.CharacterName}");
-                    yield return StartCoroutine(enemy.PersuePlayer());
-                    yield return null;
-                }
-                else
-                {
-                    enemy.State = EnemyStates.Idle;
-                    yield return null;
-                }
+                continue;
             }
+
+            var lastEnemyState = enemy.State;
+
+            //first, check if we're next to a target
+            if (IsNextToTarget(enemy, out Direction adjacentDirection))
+            {
+                yield return HandleEnemyAttack(enemy);
+                continue;
+            }
+            //next, check if we have line of sight and pursue if so
+            if (HasLineOfSightToPlayer(enemy))
+            {
+                //make sure the pursuit counter is reset if we regain line of sight
+                enemy.StopPursuit();
+                yield return HandleEnemyPursuit(enemy);
+                continue;
+            }
+            //otherwise, continue persuing if we previously had line of sight
+            if (lastEnemyState == EnemyStates.Persuing)
+            {
+                //reset the enemy if the pursuit is finished
+                if (enemy.PursueFinished())
+                {
+                    //reset pursuit counter
+                    enemy.StopPursuit();
+                    //return to idle
+                    HandleEnemyIdle(enemy);
+                    continue;
+                }
+
+                yield return HandleEnemyContinuePursuit(enemy);
+                continue;
+            }
+
+            HandleEnemyIdle(enemy);
         }
+
         if (!_enemyTurnEnding)
         {
             _enemyTurnEnding = true;
             TurnManager.Instance.EndTurn();
         }
     }
+
+    #region AI helpers
+    private bool IsNextToTarget(Enemy enemy, out Direction adjacentDirection)
+    {
+        return MoveUtils.TargetTileReached(
+            enemy.CurrentTile,
+            GameManager.Instance.Player.CurrentTile,
+            GameManager.Instance.FinalGrid,
+            out adjacentDirection);
+    }
+
+    private bool HasLineOfSightToPlayer(Enemy enemy)
+    {
+        return CombatUtils.HasLineOfSight(
+            enemy.CurrentTile,
+            GameManager.Instance.Player.CurrentTile,
+            GameManager.Instance.FinalGrid);
+    }
+
+    private IEnumerator HandleEnemyAttack(Enemy enemy)
+    {
+        Debug.Log($"{enemy.CharacterName} reached target");
+        enemy.State = EnemyStates.Attacking;
+        yield return StartCoroutine(enemy.AttackPlayer());
+    }
+
+    private IEnumerator HandleEnemyPursuit(Enemy enemy)
+    {
+        enemy.State = EnemyStates.Persuing;
+        Debug.Log($"{enemy.CharacterName} is pursuing {GameManager.Instance.Player.CharacterName}");
+        yield return StartCoroutine(enemy.PursuePlayer());
+        yield return null;
+    }
+
+    private IEnumerator HandleEnemyContinuePursuit(Enemy enemy)
+    {
+        enemy.State = EnemyStates.Persuing;
+        Debug.Log($"{enemy.CharacterName} continues pursuing {GameManager.Instance.Player.CharacterName}");
+        yield return StartCoroutine(enemy.PursuePlayer());
+        yield return null;
+    }
+
+    private void HandleEnemyIdle(Enemy enemy)
+    {
+        enemy.State = EnemyStates.Idle;
+    }
+    #endregion
 
     private void HandleTurnEnd()
     {

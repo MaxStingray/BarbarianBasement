@@ -10,6 +10,10 @@ public enum EnemyStates
 
 public class Enemy : CharacterSheet
 {
+    //for our purposes, movement squares is how long the enemy will persue the player after line of sight is broken
+    [SerializeField] protected int movementSquares = 10;
+    //how many turns the enemy has persued the player for;
+    private int PursueCounter = 0;
     [SerializeField] protected string[] names;
 
     public EnemyStates State { get; set; } = EnemyStates.Idle;
@@ -44,7 +48,7 @@ public class Enemy : CharacterSheet
         IsDead = true;
     }
 
-    public IEnumerator PersuePlayer()
+    public IEnumerator PursuePlayer()
     {
         // Decide next step
         Direction bestDir = DeterminePlayerDirection();
@@ -128,13 +132,24 @@ public class Enemy : CharacterSheet
         {
             yield return StartCoroutine(TurnToTargetDirection(bestDir));
         }
-        
+
         //since we already verified that we're next to the player, there's no need to get the tile data
         var target = GameManager.Instance.Player;
 
         CombatUtils.Attack(this, target);
-        
+
         yield return null;
     }
-    
+
+    public bool PursueFinished()
+    {
+        PursueCounter++;
+
+        return PursueCounter >= movementSquares;
+    }
+
+    public void StopPursuit()
+    {
+        PursueCounter = 0;
+    }   
 }

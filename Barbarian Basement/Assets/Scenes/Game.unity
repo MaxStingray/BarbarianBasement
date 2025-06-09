@@ -888,11 +888,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6689470085023299317, guid: 2c02b856e1274ed48ba422a9dbf46fc7, type: 3}
       propertyPath: Cols
-      value: 100
+      value: 30
       objectReference: {fileID: 0}
     - target: {fileID: 6689470085023299317, guid: 2c02b856e1274ed48ba422a9dbf46fc7, type: 3}
       propertyPath: Rows
-      value: 100
+      value: 30
       objectReference: {fileID: 0}
     - target: {fileID: 6689470085023299317, guid: 2c02b856e1274ed48ba422a9dbf46fc7, type: 3}
       propertyPath: _dungeonRoot
