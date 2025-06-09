@@ -1,11 +1,6 @@
 using UnityEngine;
 
-public class Barbarian : CharacterSheet
+public class Barbarian : Player
 {
-    public bool IsDead { get; private set; }
-    protected override void Die()
-    {
-        base.Die();
-        IsDead = true;
-    }
+
 }

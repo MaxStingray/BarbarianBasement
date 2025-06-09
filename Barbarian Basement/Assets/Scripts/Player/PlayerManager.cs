@@ -6,7 +6,7 @@ public class PlayerManager : MonoBehaviour
     private bool _playerMoved;
     private bool _playerUsedAction;
 
-    [SerializeField] private CharacterSheet _character;
+    [SerializeField] private Player _character;
 
     private Coroutine _playerActionCoroutine;
 
@@ -104,6 +104,7 @@ public class PlayerManager : MonoBehaviour
                 if (attackTargetTile != null && attackTargetTile.IsOccupied)
                 {
                     //attack the target
+                    _character.PlayHitEffect();
                     var target = attackTargetTile.OccupiedBy;
                     CombatUtils.Attack(_character, target);
                     _playerUsedAction = true;
