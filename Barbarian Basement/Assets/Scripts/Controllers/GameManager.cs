@@ -29,25 +29,66 @@ public class GameManager : MonoBehaviour
         Instance = this;
     }
 
-    IEnumerator Start()
+    // use this for now
+    void Start()
     {
+        StartNewGame();
+    }
+
+    public void StartNewGame()
+    {
+        ResetAndStartNewDungeon(true);
+    }
+
+    [ContextMenu("Debug Reset")]
+    public void StartNewFloor()
+    {
+        ResetAndStartNewDungeon(false);
+    }
+
+    public void ResetAndStartNewDungeon(bool newGame)
+    {
+        StartCoroutine(ResetDungeonSequence(newGame));
+    }
+
+    private IEnumerator ResetDungeonSequence(bool newGame)
+    {
+        GameReady = false;
+
+        // Clear existing enemies
+        _enemyManager.ClearEnemies();
+
+        // Clear dungeon
+        _dungeonGenerator.ClearDungeon();
+
+        yield return null;
+
+        // Regenerate dungeon
         _dungeonGenerator.GenerateDungeon();
 
-        while (ValidateGameReady() == false)
+        while (!ValidateGameReady())
         {
             yield return null;
         }
+
         FinalGrid = _dungeonGenerator.Grid;
-        if (_player == null)
+
+        if (newGame)
         {
-            Debug.LogError("player null");
+            //reset the player stats to their base
+            _player.ResetCharacter();
         }
-        _player.gameObject.transform.position = _dungeonGenerator.PlayerSpawnPosition;
+
+        // Move player
+        _player.transform.position = _dungeonGenerator.PlayerSpawnPosition;
         _player.CurrentTile = _dungeonGenerator.PlayerStartTile;
         _dungeonGenerator.PlayerStartTile.IsOccupied = true;
-        _dungeonGenerator.PlayerStartTile.OccupiedBy = _player;
+        _dungeonGenerator.PlayerStartTile.OccupiedByCharacter = _player;
+
+        // Update stats
         _statsPanel.UpdateStatsPanel(_player);
-        //spawn enemies
+
+        // Spawn new enemies
         _enemyManager.SpawnEnemies(FinalGrid);
     }
 

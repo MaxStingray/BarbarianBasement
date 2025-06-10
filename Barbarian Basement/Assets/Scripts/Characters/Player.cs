@@ -38,6 +38,14 @@ public class Player : CharacterSheet
         // death effects
     }
 
+    public void ResetCharacter()
+    {
+        //TODO: Clear and reset inventory here
+        CurrentBodyPoints = BodyPoints;
+        CurrentDefendDice = DefendDice;
+        CurrentAttackDice = AttackDice;
+    }
+
     public override void TakeHits(int numHits)
     {
         base.TakeHits(numHits);

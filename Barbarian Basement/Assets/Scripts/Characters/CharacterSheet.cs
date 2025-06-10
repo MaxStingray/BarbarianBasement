@@ -1,5 +1,4 @@
 using System.Collections;
-using Mono.Cecil.Cil;
 using UnityEngine;
 
 /// <summary>
@@ -22,13 +21,18 @@ public abstract class CharacterSheet : MonoBehaviour
     [SerializeField] public int DefendDice = 2;
     [SerializeField] public int AttackDice = 3;
 
-    public int CurrentBodyPoints { get; private set; }
+    //current stats - defend and attack dice can be influenced by equipped items
+    public int CurrentBodyPoints { get; protected set; }
+    public int CurrentDefendDice { get; protected set; }
+    public int CurrentAttackDice { get; protected set; }
 
     private Coroutine _rotationCoroutine;
 
     protected virtual void Awake()
     {
         CurrentBodyPoints = BodyPoints;
+        CurrentDefendDice = DefendDice;
+        CurrentAttackDice = AttackDice;
     }
 
     public virtual void OnTurnStart() { }
@@ -47,7 +51,7 @@ public abstract class CharacterSheet : MonoBehaviour
     {
         Debug.Log(characterName + " has perished");
         CurrentTile.IsOccupied = false;
-        CurrentTile.OccupiedBy = null;
+        CurrentTile.OccupiedByCharacter = null;
     }
 
     public bool AttemptMove(GameTile targetTile)
@@ -64,14 +68,14 @@ public abstract class CharacterSheet : MonoBehaviour
             CurrentTile = targetTile;
             // set the new tile as occupied and update character info
             CurrentTile.IsOccupied = true;
-            CurrentTile.OccupiedBy = this;
+            CurrentTile.OccupiedByCharacter = this;
             StartCoroutine(Slide(previousPosition, CurrentTile.Position, 0.2f));
             return true;
         }
 
         if (targetTile.IsOccupied)
         {
-            Debug.Log(characterName + " is blocked by " + targetTile.OccupiedBy.characterName);
+            Debug.Log(characterName + " is blocked by " + targetTile.OccupiedByCharacter.characterName);
         }
         else
         {

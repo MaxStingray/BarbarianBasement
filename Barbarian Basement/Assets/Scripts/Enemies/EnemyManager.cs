@@ -82,7 +82,7 @@ public class EnemyManager : MonoBehaviour
                 continue;
             }
             //otherwise, continue persuing if we previously had line of sight
-            if (lastEnemyState == EnemyStates.Persuing)
+            if (lastEnemyState == EnemyStates.Pursuing)
             {
                 //reset the enemy if the pursuit is finished
                 if (enemy.PursueFinished())
@@ -135,7 +135,7 @@ public class EnemyManager : MonoBehaviour
 
     private IEnumerator HandleEnemyPursuit(Enemy enemy)
     {
-        enemy.State = EnemyStates.Persuing;
+        enemy.State = EnemyStates.Pursuing;
         Debug.Log($"{enemy.CharacterName} is pursuing {GameManager.Instance.Player.CharacterName}");
         yield return StartCoroutine(enemy.PursuePlayer());
         yield return null;
@@ -143,7 +143,7 @@ public class EnemyManager : MonoBehaviour
 
     private IEnumerator HandleEnemyContinuePursuit(Enemy enemy)
     {
-        enemy.State = EnemyStates.Persuing;
+        enemy.State = EnemyStates.Pursuing;
         Debug.Log($"{enemy.CharacterName} continues pursuing {GameManager.Instance.Player.CharacterName}");
         yield return StartCoroutine(enemy.PursuePlayer());
         yield return null;
@@ -193,7 +193,7 @@ public class EnemyManager : MonoBehaviour
 
             // Mark the tile as occupied
             spawnTile.IsOccupied = true;
-            spawnTile.OccupiedBy = enemy;
+            spawnTile.OccupiedByCharacter = enemy;
             enemy.CurrentTile = spawnTile;
 
             spawnedEnemies.Add(enemy);
@@ -247,5 +247,24 @@ public class EnemyManager : MonoBehaviour
 
         int index = Random.Range(0, unoccupiedTiles.Count);
         return unoccupiedTiles[index];
+    }
+
+    /// <summary>
+    /// to be called on Reset
+    /// </summary>
+    public void ClearEnemies()
+    {
+        //do nothing if there are no spawned enemies
+        if (spawnedEnemies.Count == 0) return;
+
+        foreach (var enemy in spawnedEnemies)
+        {
+            if (enemy != null)
+            {
+                Destroy(enemy.gameObject);
+            }
+        }
+
+        spawnedEnemies.Clear();
     }
 }

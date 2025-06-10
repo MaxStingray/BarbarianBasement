@@ -5,15 +5,15 @@ using UnityEngine;
 public enum EnemyStates
 {
     Idle,
-    Persuing,
+    Pursuing,
     Attacking,
 }
 
 public class Enemy : CharacterSheet
 {
-    //for our purposes, movement squares is how long the enemy will persue the player after line of sight is broken
+    //for our purposes, movement squares is how long the enemy will pursue the player after line of sight is broken
     [SerializeField] protected int movementSquares = 10;
-    //how many turns the enemy has persued the player for;
+    //how many turns the enemy has pursued the player for;
     private int PursueCounter = 0;
     [SerializeField] protected string[] names;
 
@@ -71,7 +71,7 @@ public class Enemy : CharacterSheet
             }
         }
 
-        //at the end of this persue phase, check if we reached the target
+        //at the end of this pursue phase, check if we reached the target
         Direction requiredDirectionIfReachedTarget;
 
         if (MoveUtils.TargetTileReached(CurrentTile, GameManager.Instance.Player.CurrentTile, GameManager.Instance.FinalGrid, out requiredDirectionIfReachedTarget))

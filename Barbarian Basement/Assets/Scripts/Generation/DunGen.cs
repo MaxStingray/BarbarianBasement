@@ -18,24 +18,6 @@ public class WallTile
     public string Name;
 }
 
-[System.Serializable]
-public class GameTile
-{
-    //position in world space
-    public Vector3 Position;
-    //grid coordinates
-    public int x;
-    public int y;
-    public bool IsFloor = false;
-    public bool NorthWall = true;
-    public bool SouthWall = true;
-    public bool EastWall = true;
-    public bool WestWall = true;
-    //does this square have a character on it?
-    public bool IsOccupied = false;
-    public CharacterSheet OccupiedBy;
-}
-
 public class DunGen : MonoBehaviour
 {
     [SerializeField] private Transform _dungeonRoot;
@@ -100,6 +82,20 @@ public class DunGen : MonoBehaviour
                 };
             }
         }
+    }
+
+    /// <summary>
+    /// To be called on reset
+    /// </summary>
+    public void ClearDungeon()
+    {
+        foreach (Transform child in _dungeonRoot)
+        {
+            Destroy(child.gameObject);
+        }
+
+        grid = null;
+        DungeonGenerated = false;
     }
 
     #region BSP Splitting

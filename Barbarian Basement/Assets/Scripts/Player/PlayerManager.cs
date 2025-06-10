@@ -105,7 +105,7 @@ public class PlayerManager : MonoBehaviour
                 {
                     //attack the target
                     _character.PlayHitEffect();
-                    var target = attackTargetTile.OccupiedBy;
+                    var target = attackTargetTile.OccupiedByCharacter;
                     CombatUtils.Attack(_character, target);
                     _playerUsedAction = true;
                     yield return new WaitForSeconds(CombatUtils.CombatTurnStartDelay);
