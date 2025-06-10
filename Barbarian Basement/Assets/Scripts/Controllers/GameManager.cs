@@ -36,12 +36,6 @@ public class GameManager : MonoBehaviour
         Instance = this;
     }
 
-    // use this for now
-    void Start()
-    {
-        StartNewGame();
-    }
-
     public void StartNewGame()
     {
         ResetAndStartNewDungeon(true);
@@ -123,11 +117,6 @@ public class GameManager : MonoBehaviour
         _dungeonGenerator.MarkInteractables();
 
         _interactableManager.SpawnInteractables(_dungeonGenerator.InteractableTiles);
-    }
-
-    private void PlaceInteractables()
-    {
-        
     }
 
     private bool ValidateGameReady()

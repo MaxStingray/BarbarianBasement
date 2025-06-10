@@ -19,6 +19,11 @@ public class Player : CharacterSheet
     private Vignette vignette;
     private Coroutine hitEffectCoroutine;
 
+    public void UpdateName(string name)
+    {
+        characterName = name;
+    }
+
     protected override void Awake()
     {
         base.Awake();
