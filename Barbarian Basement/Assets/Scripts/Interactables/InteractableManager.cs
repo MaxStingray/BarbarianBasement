@@ -1,6 +1,4 @@
 using System.Collections.Generic;
-using UnityEditor;
-using UnityEditor.PackageManager;
 using UnityEngine;
 [System.Serializable]
 public class InteractablePrefabs
