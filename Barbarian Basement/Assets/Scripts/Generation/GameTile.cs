@@ -17,5 +17,5 @@ public class GameTile
     //if this is occupied by a character, store a ref to the character sheet
     public CharacterSheet OccupiedByCharacter;
     //if occupied by an interactable, store a ref to that
-    public Iinteractable OccupiedByInteractable;
+    public Interactable OccupiedByInteractable;
 }

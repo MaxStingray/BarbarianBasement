@@ -9,6 +9,10 @@ public class GameManager : MonoBehaviour
 
     public Player Player => _player;
 
+    [SerializeField] private GameObject _stairsPrefab;
+
+    private GameObject _spawnedStairs;
+
     [SerializeField] private EnemyManager _enemyManager;
 
     [SerializeField] private StatsPanel _statsPanel;
@@ -55,6 +59,13 @@ public class GameManager : MonoBehaviour
     {
         GameReady = false;
 
+        //clean up the stairs from the previous floor (if any)
+        if (_spawnedStairs != null)
+        {
+            Destroy(_spawnedStairs);
+            _spawnedStairs = null;
+        }
+        
         // Clear existing enemies
         _enemyManager.ClearEnemies();
 
@@ -79,17 +90,40 @@ public class GameManager : MonoBehaviour
             _player.ResetCharacter();
         }
 
-        // Move player
+        //Move player
         _player.transform.position = _dungeonGenerator.PlayerSpawnPosition;
         _player.CurrentTile = _dungeonGenerator.PlayerStartTile;
         _dungeonGenerator.PlayerStartTile.IsOccupied = true;
         _dungeonGenerator.PlayerStartTile.OccupiedByCharacter = _player;
 
-        // Update stats
+        //Add stairs
+        //TODO: make stairs rotation make sense
+        _spawnedStairs = Instantiate(_stairsPrefab, _dungeonGenerator.StairsPosition, Quaternion.identity);
+        Interactable stairs = _spawnedStairs.GetComponent<Interactable>();
+        if (!stairs)
+        {
+            Debug.LogError("stairs prefab is not valid and will not be interactable");
+        }
+        else
+        {
+            _dungeonGenerator.StairsTile.IsOccupied = true;
+            _dungeonGenerator.StairsTile.OccupiedByInteractable = stairs;
+        }
+
+        //Update stats
         _statsPanel.UpdateStatsPanel(_player);
 
-        // Spawn new enemies
+        //Spawn new enemies
         _enemyManager.SpawnEnemies(FinalGrid);
+
+        _dungeonGenerator.MarkInteractables();
+
+        PlaceInteractables();
+    }
+
+    private void PlaceInteractables()
+    {
+        
     }
 
     private bool ValidateGameReady()

@@ -38,6 +38,14 @@ public class DunGen : MonoBehaviour
     public GameTile StairsTile { get; private set; }
     public bool DungeonGenerated { get; private set; }
 
+    //special room placements
+    private List<BSPNode> _rooms = new List<BSPNode>(); //store all rooms
+    private List<BSPNode> _eligibleInteractableRooms = new List<BSPNode>(); //rooms eligible for containing interactables (excludes player and stairs rooms)
+    public List<GameTile> InteractableTiles { get; private set; } = new List<GameTile>();
+    public BSPNode PlayerRoom { get; private set; }
+    public BSPNode StairsRoom{ get; private set; }
+
+
     [ContextMenu("Generate Dungeon")]
     public void GenerateDungeon()
     {
@@ -100,7 +108,7 @@ public class DunGen : MonoBehaviour
 
     #region BSP Splitting
 
-    private class BSPNode
+    public class BSPNode
     {
         public RectInt Area;
         public BSPNode Left;
@@ -142,7 +150,9 @@ public class DunGen : MonoBehaviour
         }
 
         ConnectRooms(leafNodes);
+        _rooms = leafNodes;
         ChoosePlayerAndStairs(leafNodes);
+        MarkEligibleInteractableRooms(_rooms);
     }
 
     private void ChoosePlayerAndStairs(List<BSPNode> leafNodes)
@@ -172,6 +182,9 @@ public class DunGen : MonoBehaviour
         StairsPosition = grid[stairsCoords.x, stairsCoords.y].Position;
         StairsTile = grid[stairsCoords.x, stairsCoords.y];
 
+        PlayerRoom = playerRoom;
+        StairsRoom = stairsRoom;
+
         if (!PlayerStartTile.IsFloor)
         {
             Debug.LogWarning("PlayerStartTile is not on a floor! Trying to find fallback.");
@@ -186,6 +199,56 @@ public class DunGen : MonoBehaviour
                         break;
                     }
                 }
+            }
+        }
+    }
+
+    private void MarkEligibleInteractableRooms(List<BSPNode> rooms)
+    {
+        //make sure this is clear (for resets etc)
+        _eligibleInteractableRooms.Clear();
+        //check the entire rooms collection
+        foreach (var room in rooms)
+        {
+            //exclude player and stairs rooms
+            if (room == null || room == PlayerRoom || room == StairsRoom)
+            {
+                continue;
+            }
+            //add any potential interactable rooms to the list
+            _eligibleInteractableRooms.Add(room);
+        }
+    }
+
+    public void MarkInteractables()
+    {
+        InteractableTiles.Clear();
+
+        if (_eligibleInteractableRooms.Count < 2)
+        {
+            Debug.LogWarning("not enough rooms for all essential interactables. Make dungeon bigger");
+            return;
+        }
+
+        // Guarantee at least one merchant/NPC room per floor
+        BSPNode merchantRoom = PickAndRemoveRandomRoom(_eligibleInteractableRooms);
+        Vector2Int merchantCoords = GetRoomCenter(merchantRoom.Room);
+        InteractableTiles.Add(grid[merchantCoords.x, merchantCoords.y]);
+
+        // Guarantee at least one treasure room per floor
+        BSPNode chestRoom = PickAndRemoveRandomRoom(_eligibleInteractableRooms);
+        Vector2Int chestcoords = GetRoomCenter(chestRoom.Room);
+        InteractableTiles.Add(grid[chestcoords.x, chestcoords.y]);
+
+        // Add random interactables to remaining rooms
+
+        float fillChance = 0.3f;
+        foreach (var room in _eligibleInteractableRooms)
+        {
+            if (Random.value < fillChance)
+            {
+                Vector2Int coords = GetRoomCenter(room.Room);
+                InteractableTiles.Add(grid[coords.x, coords.y]);
             }
         }
     }
@@ -287,6 +350,20 @@ public class DunGen : MonoBehaviour
                 }
             }
         }
+    }
+
+    /// <summary>
+    /// removes one random room from the rooms list
+    /// </summary>
+    /// <param name="rooms"></param>
+    /// <returns></returns>
+    private BSPNode PickAndRemoveRandomRoom(List<BSPNode> rooms)
+    {
+        if (rooms.Count == 0) return null;
+        int index = Random.Range(0, rooms.Count);
+        BSPNode selected = rooms[index];
+        rooms.RemoveAt(index);
+        return selected;
     }
 
     private void ConnectRooms(List<BSPNode> rooms)

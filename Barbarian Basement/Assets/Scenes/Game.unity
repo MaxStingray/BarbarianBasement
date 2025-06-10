@@ -845,6 +845,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _dungeonGenerator: {fileID: 1237725892}
   _player: {fileID: 454246798}
+  _stairsPrefab: {fileID: 6322070172688686330, guid: 0b4f2eef53dfae748859fb6ddc8eb18e, type: 3}
   _enemyManager: {fileID: 578071123}
   _statsPanel: {fileID: 1437509722}
 --- !u!4 &435853330

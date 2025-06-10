@@ -101,7 +101,7 @@ public class PlayerManager : MonoBehaviour
                     _character.FacingDirection, GameManager.Instance.FinalGrid);
 
                 //if there is a valid tile and something is standing on it
-                if (attackTargetTile != null && attackTargetTile.IsOccupied)
+                if (attackTargetTile != null && attackTargetTile.IsOccupied && attackTargetTile.OccupiedByCharacter)
                 {
                     //attack the target
                     _character.PlayHitEffect();
@@ -114,6 +114,25 @@ public class PlayerManager : MonoBehaviour
                 else
                 {
                     Debug.Log("no valid target");
+                }
+            }
+            // attempt interaction
+            if (Input.GetKeyDown(KeyCode.E))
+            {
+                //get the tile we're facing
+                var interactableTargetTile = MoveUtils.GetTargetTile(_character.CurrentTile,
+                    _character.FacingDirection, GameManager.Instance.FinalGrid);
+
+                //check it has an interactable
+                if (interactableTargetTile != null && interactableTargetTile.IsOccupied && interactableTargetTile.OccupiedByInteractable)
+                {
+                    interactableTargetTile.OccupiedByInteractable.StartInteraction();
+                    _playerUsedAction = true;
+                    break;
+                }
+                else
+                {
+                    Debug.Log("nothing to interact with");
                 }
             }
 

@@ -75,7 +75,14 @@ public abstract class CharacterSheet : MonoBehaviour
 
         if (targetTile.IsOccupied)
         {
-            Debug.Log(characterName + " is blocked by " + targetTile.OccupiedByCharacter.characterName);
+            if (targetTile.OccupiedByCharacter)
+            {
+                Debug.Log(characterName + " is blocked by " + targetTile.OccupiedByCharacter.characterName);
+            }
+            else if (targetTile.OccupiedByInteractable != null)
+            {
+                Debug.Log(characterName + " is blocked by " + targetTile.OccupiedByInteractable.name);
+            }
         }
         else
         {
