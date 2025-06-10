@@ -847,6 +847,7 @@ MonoBehaviour:
   _player: {fileID: 454246798}
   _stairsPrefab: {fileID: 6322070172688686330, guid: 0b4f2eef53dfae748859fb6ddc8eb18e, type: 3}
   _enemyManager: {fileID: 578071123}
+  _interactableManager: {fileID: 1923491024}
   _statsPanel: {fileID: 1437509722}
 --- !u!4 &435853330
 Transform:
@@ -864,6 +865,7 @@ Transform:
   - {fileID: 1966806153}
   - {fileID: 381884456}
   - {fileID: 578071124}
+  - {fileID: 1923491025}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &454246798 stripped
@@ -1480,6 +1482,56 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1866916224}
   m_CullTransparentMesh: 1
+--- !u!1 &1923491023
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1923491025}
+  - component: {fileID: 1923491024}
+  m_Layer: 0
+  m_Name: InteractableManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1923491024
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1923491023}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8b14190ed52954f47a1245ce00314daf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _treasureChestPrefab: {fileID: 3398432789164919565, guid: d3a6f6d8e1a28fa41903639b87d4c7da, type: 3}
+  _merchantPrefab: {fileID: 8116028131015531380, guid: 5fb9516f77ab45348ae56ce9f1b35323, type: 3}
+  _interactablePrefabs:
+  - Prefab: {fileID: 3398432789164919565, guid: d3a6f6d8e1a28fa41903639b87d4c7da, type: 3}
+    Weight: 100
+    Name: Treasure Chest
+--- !u!4 &1923491025
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1923491023}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 435853330}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1966806152
 GameObject:
   m_ObjectHideFlags: 0

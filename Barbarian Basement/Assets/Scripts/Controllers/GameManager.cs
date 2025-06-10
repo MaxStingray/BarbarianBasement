@@ -14,6 +14,7 @@ public class GameManager : MonoBehaviour
     private GameObject _spawnedStairs;
 
     [SerializeField] private EnemyManager _enemyManager;
+    [SerializeField] private InteractableManager _interactableManager;
 
     [SerializeField] private StatsPanel _statsPanel;
     public StatsPanel StatsPanel => _statsPanel;
@@ -22,6 +23,8 @@ public class GameManager : MonoBehaviour
     public GameTile[,] FinalGrid { get; private set; }
 
     public bool GameReady { get; private set; }
+
+    public int FloorCounter { get; private set; } = 1;
 
     void Awake()
     {
@@ -45,8 +48,9 @@ public class GameManager : MonoBehaviour
     }
 
     [ContextMenu("Debug Reset")]
-    public void StartNewFloor()
+    public void MoveToNextFloor()
     {
+        FloorCounter++;
         ResetAndStartNewDungeon(false);
     }
 
@@ -118,7 +122,7 @@ public class GameManager : MonoBehaviour
 
         _dungeonGenerator.MarkInteractables();
 
-        PlaceInteractables();
+        _interactableManager.SpawnInteractables(_dungeonGenerator.InteractableTiles);
     }
 
     private void PlaceInteractables()

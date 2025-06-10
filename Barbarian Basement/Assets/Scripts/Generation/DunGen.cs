@@ -232,12 +232,12 @@ public class DunGen : MonoBehaviour
 
         // Guarantee at least one merchant/NPC room per floor
         BSPNode merchantRoom = PickAndRemoveRandomRoom(_eligibleInteractableRooms);
-        Vector2Int merchantCoords = GetRoomCenter(merchantRoom.Room);
+        Vector2Int merchantCoords = GetSafeRoomCenter(merchantRoom.Room);
         InteractableTiles.Add(grid[merchantCoords.x, merchantCoords.y]);
 
         // Guarantee at least one treasure room per floor
         BSPNode chestRoom = PickAndRemoveRandomRoom(_eligibleInteractableRooms);
-        Vector2Int chestcoords = GetRoomCenter(chestRoom.Room);
+        Vector2Int chestcoords = GetSafeRoomCenter(chestRoom.Room);
         InteractableTiles.Add(grid[chestcoords.x, chestcoords.y]);
 
         // Add random interactables to remaining rooms
@@ -247,7 +247,7 @@ public class DunGen : MonoBehaviour
         {
             if (Random.value < fillChance)
             {
-                Vector2Int coords = GetRoomCenter(room.Room);
+                Vector2Int coords = GetSafeRoomCenter(room.Room);
                 InteractableTiles.Add(grid[coords.x, coords.y]);
             }
         }
@@ -374,6 +374,90 @@ public class DunGen : MonoBehaviour
             Vector2Int currCenter = GetRoomCenter(rooms[i].Room);
             CarveCorridor(prevCenter, currCenter);
         }
+    }
+
+    //determines if this tile is "safe" (not adjacent to a corridoor)
+    private bool IsSafeTile(int x, int y)
+    {
+        // Defensive check
+        if (x < 0 || y < 0 || x >= Rows || y >= Cols)
+            return false;
+
+        // Skip if not a floor
+        if (!grid[x, y].IsFloor)
+            return false;
+
+        // Check surrounding tiles
+        int corridorCount = 0;
+
+        // Check cardinal directions
+        Vector2Int[] directions = new Vector2Int[]
+        {
+            new Vector2Int(0, 1),  // North
+            new Vector2Int(0, -1), // South
+            new Vector2Int(1, 0),  // East
+            new Vector2Int(-1, 0)  // West
+        };
+
+        foreach (var dir in directions)
+        {
+            int nx = x + dir.x;
+            int ny = y + dir.y;
+            if (nx >= 0 && ny >= 0 && nx < Rows && ny < Cols)
+            {
+                if (!grid[nx, ny].IsFloor)
+                    continue;
+
+                // If that adjacent tile is a corridor
+                if (IsCorridorTile(nx, ny))
+                {
+                    corridorCount++;
+                }
+            }
+        }
+
+        // If adjacent to 2+ corridors, treat as a corridor entry point — avoid it!
+        if (corridorCount >= 2)
+            return false;
+
+        return true;
+    }
+
+    private bool IsCorridorTile(int x, int y)
+    {
+        // If a tile is part of a corridor, it usually has fewer walls than a room tile
+        int wallCount = 0;
+        if (grid[x, y].NorthWall) wallCount++;
+        if (grid[x, y].SouthWall) wallCount++;
+        if (grid[x, y].EastWall) wallCount++;
+        if (grid[x, y].WestWall) wallCount++;
+
+        // Corridor tiles are usually open on 2 sides or more
+        return wallCount <= 2;
+    }
+
+    private Vector2Int GetSafeRoomCenter(RectInt room)
+    {
+        List<Vector2Int> safeTiles = new List<Vector2Int>();
+
+        for (int x = room.x; x < room.x + room.width; x++)
+        {
+            for (int y = room.y; y < room.y + room.height; y++)
+            {
+                if (IsSafeTile(x, y))
+                {
+                    safeTiles.Add(new Vector2Int(x, y));
+                }
+            }
+        }
+
+        if (safeTiles.Count > 0)
+        {
+            return safeTiles[Random.Range(0, safeTiles.Count)];
+        }
+
+        // fallback to original method if no safe tile found
+        return GetRoomCenter(room);
     }
 
     private Vector2Int GetRoomCenter(RectInt room)
