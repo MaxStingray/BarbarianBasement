@@ -11,20 +11,7 @@ public class Door : Interactable
     {
         _doorMesh.SetActive(false);
 
-        switch (WallDirection)
-        {
-            case Direction.North:
-                TileData.NorthWall = false;
-                break;
-            case Direction.South:
-                TileData.SouthWall = false;
-                break;
-            case Direction.East:
-                TileData.EastWall = false;
-                break;
-            case Direction.West:
-                TileData.WestWall = false;
-                break;
-        }
+        TileData.SetBlocked(WallDirection, false);
     }
+
 }

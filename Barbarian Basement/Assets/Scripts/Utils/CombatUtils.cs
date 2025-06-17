@@ -109,11 +109,8 @@ public static class CombatUtils
 
         while (true)
         {
-            // Reached the destination tile
             if (x0 == x1 && y0 == y1)
-            {
                 break;
-            }
 
             int nextX = x0;
             int nextY = y0;
@@ -130,39 +127,23 @@ public static class CombatUtils
                 nextY += sy;
             }
 
-            // Check bounds
+            // Bounds check
             if (nextX < 0 || nextX >= grid.GetLength(0) || nextY < 0 || nextY >= grid.GetLength(1))
-            {
                 return false;
-            }
 
             GameTile currentTile = grid[x0, y0];
             GameTile nextTile = grid[nextX, nextY];
 
             // Determine direction of movement
-            if (nextX > x0)
-            {
-                if (currentTile.EastWall || nextTile.WestWall)
-                    return false;
-            }
-            else if (nextX < x0)
-            {
-                if (currentTile.WestWall || nextTile.EastWall)
-                    return false;
-            }
+            if (nextX > x0 && (currentTile.IsBlocked(Direction.East) || nextTile.IsBlocked(Direction.West)))
+                return false;
+            if (nextX < x0 && (currentTile.IsBlocked(Direction.West) || nextTile.IsBlocked(Direction.East)))
+                return false;
+            if (nextY > y0 && (currentTile.IsBlocked(Direction.North) || nextTile.IsBlocked(Direction.South)))
+                return false;
+            if (nextY < y0 && (currentTile.IsBlocked(Direction.South) || nextTile.IsBlocked(Direction.North)))
+                return false;
 
-            if (nextY > y0)
-            {
-                if (currentTile.NorthWall || nextTile.SouthWall)
-                    return false;
-            }
-            else if (nextY < y0)
-            {
-                if (currentTile.SouthWall || nextTile.NorthWall)
-                    return false;
-            }
-
-            // Move to the next tile
             x0 = nextX;
             y0 = nextY;
         }

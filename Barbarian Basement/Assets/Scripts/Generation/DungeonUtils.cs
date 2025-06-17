@@ -55,8 +55,8 @@ public static class DungeonUtils
         {
             case Direction.North: return Direction.South;
             case Direction.South: return Direction.North;
-            case Direction.East:  return Direction.West;
-            case Direction.West:  return Direction.East;
+            case Direction.East: return Direction.West;
+            case Direction.West: return Direction.East;
             default: return dir;
         }
     }
@@ -165,6 +165,21 @@ public static class DungeonUtils
             if (rand < runningWeight) return tile.Prefab;
         }
         return wallTiles[0].Prefab;
+    }
+
+    /// <summary>
+    /// Check whether there is already wall bewteen this tile and the adjacent tile
+    /// so we only use useful tiles in door placement
+    /// </summary>
+    /// <param name="a"></param>
+    /// <param name="b"></param>
+    /// <param name="dir"></param>
+    /// <returns></returns>
+    public static bool IsWallBetween(GameTile a, GameTile b, Direction dir)
+    {
+        Direction opposite = DungeonUtils.GetOppositeDirection(dir);
+
+        return a.IsBlocked(dir) || b.IsBlocked(opposite);
     }
 
 }
