@@ -11,7 +11,7 @@ public static class CombatUtils
         hit = false;
         //attacker rolls attack die
         int hits = 0;
-        for (int i = 0; i < attacker.AttackDice; i++)
+        for (int i = 0; i < attacker.CurrentAttackDice; i++)
         {
             if (RollAttackDie())
             {
@@ -20,7 +20,7 @@ public static class CombatUtils
         }
 
         int blocks = 0;
-        for (int i = 0; i < target.DefendDice; i++)
+        for (int i = 0; i < target.CurrentDefendDice; i++)
         {
             if (RollDefenceDie(target is Enemy))
             {
@@ -85,6 +85,11 @@ public static class CombatUtils
         }
 
         return false;
+    }
+
+    public static int RollMovementDie()
+    {
+        return Random.Range(1, 6);
     }
 
     /// <summary>

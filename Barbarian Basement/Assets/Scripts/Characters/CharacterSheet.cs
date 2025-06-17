@@ -19,15 +19,17 @@ public abstract class CharacterSheet : MonoBehaviour
 
     public string CharacterName => characterName;
 
+    public int CurrentGold { get; private set; }
+
     //Basic stats (yeah it's HeroQuest)
-    [SerializeField] protected int BodyPoints = 8;
-    [SerializeField] public int DefendDice = 2;
-    [SerializeField] public int AttackDice = 3;
+    public int BodyPoints = 8;
+    public int DefendDice = 2;
+    public int AttackDice = 3;
 
     //current stats - defend and attack dice can be influenced by equipped items
-    public int CurrentBodyPoints { get; protected set; }
-    public int CurrentDefendDice { get; protected set; }
-    public int CurrentAttackDice { get; protected set; }
+    public int CurrentBodyPoints { get; set; }
+    public int CurrentDefendDice { get; set; }
+    public int CurrentAttackDice { get; set; }
 
     private Coroutine _rotationCoroutine;
 
@@ -187,5 +189,10 @@ public abstract class CharacterSheet : MonoBehaviour
         if (!audioSource) return;
 
         audioSource.PlayOneShot(clip);
+    }
+
+    public void AddGold(int amount)
+    {
+        CurrentGold += amount;
     }
 }
