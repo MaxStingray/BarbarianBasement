@@ -369,7 +369,7 @@ public class DunGen : MonoBehaviour
                     if (grid[x, y].IsFloor)
                     {
                         PlayerStartTile = grid[x, y];
-                        PlayerSpawnPosition = new Vector3(grid[x, y].Position.x, 1.7f, grid[x, y].Position.z);
+                        PlayerSpawnPosition = new Vector3(grid[x, y].Position.x, 1.5f, grid[x, y].Position.z);
                         break;
                     }
                 }
