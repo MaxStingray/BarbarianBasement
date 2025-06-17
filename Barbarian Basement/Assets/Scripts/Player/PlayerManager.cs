@@ -119,25 +119,55 @@ public class PlayerManager : MonoBehaviour
             // attempt interaction
             if (Input.GetKeyDown(KeyCode.E))
             {
-                //get the tile we're facing
-                var interactableTargetTile = MoveUtils.GetTargetTile(_character.CurrentTile,
-                    _character.FacingDirection, GameManager.Instance.FinalGrid);
-
-                //check it has an interactable
-                if (interactableTargetTile != null && interactableTargetTile.IsOccupied && interactableTargetTile.OccupiedByInteractable)
-                {
-                    interactableTargetTile.OccupiedByInteractable.StartInteraction();
-                    _playerUsedAction = true;
-                    break;
-                }
-                else
-                {
-                    Debug.Log("nothing to interact with");
-                }
+                AttemptInteraction();
             }
 
             yield return null;
         }
         TurnManager.Instance.EndTurn();
+    }
+
+    /// <summary>
+    /// attempt to interact with the adjacent tile (special rules for doors)
+    /// </summary>
+    private void AttemptInteraction()
+    {
+        var facing = _character.FacingDirection;
+        var currentTile = _character.CurrentTile;
+        var grid = GameManager.Instance.FinalGrid;
+        var targetTile = MoveUtils.GetTargetTile(currentTile, facing, grid);
+
+        GameTile interactionTile = null;
+
+        // Case 1: Interactable in front (normal)
+        if (targetTile != null && targetTile.IsOccupied && targetTile.OccupiedByInteractable != null)
+        {
+            interactionTile = targetTile;
+        }
+        // Case 2: Door on the current tile's wall (e.g. facing out from this tile)
+        else if (currentTile.HasDoor &&
+                currentTile.OccupiedByInteractable is Door door &&
+                door.WallDirection == facing)
+        {
+            interactionTile = currentTile;
+        }
+        // ✅ Case 3: Door on the target tile, facing *back* toward us
+        else if (targetTile != null &&
+                targetTile.HasDoor &&
+                targetTile.OccupiedByInteractable is Door doorBack &&
+                doorBack.WallDirection == MoveUtils.GetOppositeDirection(facing))
+        {
+            interactionTile = targetTile;
+        }
+
+        if (interactionTile != null)
+        {
+            interactionTile.OccupiedByInteractable.StartInteraction();
+            _playerUsedAction = true;
+        }
+        else
+        {
+            Debug.Log("nothing to interact with");
+        }
     }
 }

@@ -171,4 +171,21 @@ public static class MoveUtils
                 return null;
         }
     }
+
+    /// <summary>
+    /// gets the direction directly opposite a given direction
+    /// </summary>
+    /// <param name="dir"></param>
+    /// <returns></returns>
+    public static Direction GetOppositeDirection(Direction dir)
+    {
+        return dir switch
+        {
+            Direction.North => Direction.South,
+            Direction.South => Direction.North,
+            Direction.East => Direction.West,
+            Direction.West => Direction.East,
+            _ => dir
+        };
+    }
 }

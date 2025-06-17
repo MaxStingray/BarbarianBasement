@@ -2979,6 +2979,10 @@ PrefabInstance:
       value: 30
       objectReference: {fileID: 0}
     - target: {fileID: 6689470085023299317, guid: 2c02b856e1274ed48ba422a9dbf46fc7, type: 3}
+      propertyPath: _doorPrefab
+      value: 
+      objectReference: {fileID: 7321394015853581805, guid: da9db64542c4aca4bab60a59757c01b8, type: 3}
+    - target: {fileID: 6689470085023299317, guid: 2c02b856e1274ed48ba422a9dbf46fc7, type: 3}
       propertyPath: _dungeonRoot
       value: 
       objectReference: {fileID: 1624908213}

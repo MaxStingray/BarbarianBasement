@@ -93,6 +93,7 @@ public class InteractableManager : MonoBehaviour
 
         tile.IsOccupied = true;
         tile.OccupiedByInteractable = interactable;
+        interactable.TileData = tile;
 
         _spawnedInteractables.Add(prefabGO);
     }

@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 using UnityEditor;
+using UnityEngine.Analytics;
 
 [System.Serializable]
 public class FloorTile
@@ -27,6 +28,7 @@ public class DunGen : MonoBehaviour
     [SerializeField] private int maxRoomSize = 5;
     [SerializeField] private FloorTile[] _floorTiles;
     [SerializeField] private WallTile[] _wallTiles;
+    [SerializeField] private GameObject _doorPrefab;
 
     private GameTile[,] grid;
 
@@ -51,24 +53,9 @@ public class DunGen : MonoBehaviour
     {
         InitializeGrid();
         SplitAndCreateRooms();
+        AddDoors();
         InstantiateFloorTiles();
         InstantiateWalls();
-        // Optional: Remove ALL irrelevant walls from corridor tiles
-        for (int x = 0; x < Rows; x++)
-        {
-            for (int y = 0; y < Cols; y++)
-            {
-                if (grid[x, y].IsFloor)
-                {
-                    // Only keep relevant walls for room edges; corridors are open
-                    // Optionally, reset all walls for corridor tiles
-                    grid[x, y].NorthWall = false;
-                    grid[x, y].SouthWall = false;
-                    grid[x, y].EastWall = false;
-                    grid[x, y].WestWall = false;
-                }
-            }
-        }
         DungeonGenerated = true;
     }
 
@@ -108,20 +95,6 @@ public class DunGen : MonoBehaviour
 
     #region BSP Splitting
 
-    public class BSPNode
-    {
-        public RectInt Area;
-        public BSPNode Left;
-        public BSPNode Right;
-        public RectInt Room;
-
-        public bool IsLeaf => Left == null && Right == null;
-
-        public BSPNode(RectInt area)
-        {
-            Area = area;
-        }
-    }
 
     private void SplitAndCreateRooms()
     {
@@ -142,7 +115,7 @@ public class DunGen : MonoBehaviour
             }
         }
 
-        List<BSPNode> leafNodes = GetLeafNodes(rootNode);
+        List<BSPNode> leafNodes = DungeonUtils.GetLeafNodes(rootNode);
 
         foreach (var leaf in leafNodes)
         {
@@ -289,28 +262,6 @@ public class DunGen : MonoBehaviour
         return true;
     }
 
-    private List<BSPNode> GetLeafNodes(BSPNode root)
-    {
-        List<BSPNode> leaves = new List<BSPNode>();
-        Queue<BSPNode> queue = new Queue<BSPNode>();
-        queue.Enqueue(root);
-
-        while (queue.Count > 0)
-        {
-            BSPNode node = queue.Dequeue();
-            if (node.IsLeaf)
-            {
-                leaves.Add(node);
-            }
-            else
-            {
-                if (node.Left != null) queue.Enqueue(node.Left);
-                if (node.Right != null) queue.Enqueue(node.Right);
-            }
-        }
-
-        return leaves;
-    }
 
     private void PlaceRoom(BSPNode node)
     {
@@ -337,6 +288,8 @@ public class DunGen : MonoBehaviour
             for (int y = roomY; y < roomY + roomHeight; y++)
             {
                 grid[x, y].IsFloor = true;
+                //set the tile to "Room"
+                grid[x, y].Type = TileType.Room;
 
                 if (x > roomX)
                 {
@@ -350,6 +303,113 @@ public class DunGen : MonoBehaviour
                 }
             }
         }
+    }
+
+    public void AddDoors()
+    {
+        Debug.Log("Adding doors");
+        for (int x = 0; x < Rows; x++)
+        {
+            for (int y = 0; y < Cols; y++)
+            {
+                GameTile tile = grid[x, y];
+
+                if (!tile.IsFloor) continue;
+
+                // Check each direction
+                TryPlaceDoor(x, y, Direction.North);
+                TryPlaceDoor(x, y, Direction.South);
+                TryPlaceDoor(x, y, Direction.East);
+                TryPlaceDoor(x, y, Direction.West);
+            }
+        }
+    }
+
+    private void TryPlaceDoor(int x, int y, Direction dir)
+    {
+        Vector2Int offset = DungeonUtils.GetDirectionOffset(dir);
+        int nx = x + offset.x;
+        int ny = y + offset.y;
+
+        // Defensive bounds check
+        if (nx < 0 || ny < 0 || nx >= Rows || ny >= Cols)
+            return;
+
+        GameTile currentTile = grid[x, y];
+        GameTile neighborTile = grid[nx, ny];
+
+        if (!currentTile.IsFloor || !neighborTile.IsFloor)
+            return;
+
+        // Only place a door between a room and a corridor
+        bool oneRoom = DungeonUtils.IsRoomTile(currentTile) || DungeonUtils.IsRoomTile(neighborTile);
+        bool oneCorridor = DungeonUtils.IsCorridorTile(currentTile) || DungeonUtils.IsCorridorTile(neighborTile);
+        
+
+        if (oneRoom && oneCorridor)
+        {
+            // Only place the door once (not on both sides)
+            if (DungeonUtils.IsCorridorTile(currentTile))
+            {
+                PlaceDoor(currentTile, dir);
+            }
+            else
+            {
+                // Flip direction to place on the corridor side
+                Direction opposite = DungeonUtils.GetOppositeDirection(dir);
+                PlaceDoor(neighborTile, opposite);
+            }
+        }
+    }
+
+
+    private void PlaceDoor(GameTile tile, Direction wallDir)
+    {
+        if (tile.OccupiedByInteractable != null || tile.HasDoor)
+            return;
+
+        // Match the wall placement offset
+        Vector3 positionOffset = Vector3.zero;
+        Quaternion rotation = Quaternion.identity;
+
+        switch (wallDir)
+        {
+            case Direction.North:
+                positionOffset = new Vector3(0, 0, 2);
+                rotation = Quaternion.Euler(0, 180, 0);
+                //tile.NorthWall = true;
+                break;
+            case Direction.South:
+                positionOffset = new Vector3(0, 0, -2);
+                rotation = Quaternion.Euler(0, 0, 0);
+                //tile.SouthWall = true;
+                break;
+            case Direction.East:
+                positionOffset = new Vector3(2, 0, 0);
+                rotation = Quaternion.Euler(0, -90, 0);
+                //tile.EastWall = true;
+                break;
+            case Direction.West:
+                positionOffset = new Vector3(-2, 0, 0);
+                rotation = Quaternion.Euler(0, 90, 0);
+                //tile.WestWall = true;
+                break;
+        }
+
+        GameObject doorGO = GameObject.Instantiate(_doorPrefab, tile.Position + positionOffset, rotation, _dungeonRoot);
+        Door door = doorGO.GetComponent<Door>();
+        if (door == null)
+        {
+            Debug.LogError("Door prefab missing Door component!");
+            GameObject.Destroy(doorGO);
+            return;
+        }
+
+        door.TileData = tile;
+        door.WallDirection = wallDir;
+
+        tile.HasDoor = true;
+        tile.OccupiedByInteractable = door;
     }
 
     /// <summary>
@@ -376,66 +436,6 @@ public class DunGen : MonoBehaviour
         }
     }
 
-    //determines if this tile is "safe" (not adjacent to a corridoor)
-    private bool IsSafeTile(int x, int y)
-    {
-        // Defensive check
-        if (x < 0 || y < 0 || x >= Rows || y >= Cols)
-            return false;
-
-        // Skip if not a floor
-        if (!grid[x, y].IsFloor)
-            return false;
-
-        // Check surrounding tiles
-        int corridorCount = 0;
-
-        // Check cardinal directions
-        Vector2Int[] directions = new Vector2Int[]
-        {
-            new Vector2Int(0, 1),  // North
-            new Vector2Int(0, -1), // South
-            new Vector2Int(1, 0),  // East
-            new Vector2Int(-1, 0)  // West
-        };
-
-        foreach (var dir in directions)
-        {
-            int nx = x + dir.x;
-            int ny = y + dir.y;
-            if (nx >= 0 && ny >= 0 && nx < Rows && ny < Cols)
-            {
-                if (!grid[nx, ny].IsFloor)
-                    continue;
-
-                // If that adjacent tile is a corridor
-                if (IsCorridorTile(nx, ny))
-                {
-                    corridorCount++;
-                }
-            }
-        }
-
-        // If adjacent to 2+ corridors, treat as a corridor entry point — avoid it!
-        if (corridorCount >= 2)
-            return false;
-
-        return true;
-    }
-
-    private bool IsCorridorTile(int x, int y)
-    {
-        // If a tile is part of a corridor, it usually has fewer walls than a room tile
-        int wallCount = 0;
-        if (grid[x, y].NorthWall) wallCount++;
-        if (grid[x, y].SouthWall) wallCount++;
-        if (grid[x, y].EastWall) wallCount++;
-        if (grid[x, y].WestWall) wallCount++;
-
-        // Corridor tiles are usually open on 2 sides or more
-        return wallCount <= 2;
-    }
-
     private Vector2Int GetSafeRoomCenter(RectInt room)
     {
         List<Vector2Int> safeTiles = new List<Vector2Int>();
@@ -444,7 +444,7 @@ public class DunGen : MonoBehaviour
         {
             for (int y = room.y; y < room.y + room.height; y++)
             {
-                if (IsSafeTile(x, y))
+                if (DungeonUtils.IsSafeTile(Rows, Cols, x, y, Grid))
                 {
                     safeTiles.Add(new Vector2Int(x, y));
                 }
@@ -496,16 +496,21 @@ public class DunGen : MonoBehaviour
             int step = (end.x > x) ? 1 : -1;
             x += step;
             grid[x, y].IsFloor = true;
+            // don't overwrite the tileType of room tiles
+            if (grid[x, y].Type != TileType.Room)
+            {
+                grid[x, y].Type = TileType.Corridor;
+            }
             if (step > 0)
-            {
-                grid[x, y].WestWall = false;
-                grid[x - 1, y].EastWall = false;
-            }
-            else
-            {
-                grid[x, y].EastWall = false;
-                grid[x + 1, y].WestWall = false;
-            }
+                {
+                    grid[x, y].WestWall = false;
+                    grid[x - 1, y].EastWall = false;
+                }
+                else
+                {
+                    grid[x, y].EastWall = false;
+                    grid[x + 1, y].WestWall = false;
+                }
         }
 
         while (y != end.y)
@@ -539,7 +544,7 @@ public class DunGen : MonoBehaviour
             {
                 if (grid[x, y].IsFloor)
                 {
-                    Instantiate(GetRandomFloorTile(), grid[x, y].Position, Quaternion.identity, floorRoot.transform);
+                    Instantiate(DungeonUtils.GetRandomFloorTile(_floorTiles), grid[x, y].Position, Quaternion.identity, floorRoot.transform);
                 }
             }
         }
@@ -555,58 +560,30 @@ public class DunGen : MonoBehaviour
             for (int y = 0; y < Cols; y++)
             {
                 GameTile tile = grid[x, y];
-                GameObject prefab = GetRandomWallTile();
-
-                if (tile.NorthWall)
+                GameObject prefab = DungeonUtils.GetRandomWallTile(_wallTiles);
+                
+                if (tile.NorthWall && !tile.HasDoorOn(Direction.North))
                 {
                     Vector3 wallPos = tile.Position + new Vector3(0, 0, 2);
                     Instantiate(prefab, wallPos, Quaternion.Euler(0, 180, 0), wallRoot.transform);
                 }
-                if (tile.SouthWall)
+                if (tile.SouthWall && !tile.HasDoorOn(Direction.South))
                 {
                     Vector3 wallPos = tile.Position + new Vector3(0, 0, -2);
                     Instantiate(prefab, wallPos, Quaternion.identity, wallRoot.transform);
                 }
-                if (tile.EastWall)
+                if (tile.EastWall && !tile.HasDoorOn(Direction.East))
                 {
                     Vector3 wallPos = tile.Position + new Vector3(2, 0, 0);
                     Instantiate(prefab, wallPos, Quaternion.Euler(0, -90, 0), wallRoot.transform);
                 }
-                if (tile.WestWall)
+                if (tile.WestWall && !tile.HasDoorOn(Direction.West))
                 {
                     Vector3 wallPos = tile.Position + new Vector3(-2, 0, 0);
                     Instantiate(prefab, wallPos, Quaternion.Euler(0, 90, 0), wallRoot.transform);
                 }
             }
         }
-    }
-
-    private GameObject GetRandomFloorTile()
-    {
-        int totalWeight = 0;
-        foreach (var tile in _floorTiles) totalWeight += tile.Weight;
-        int rand = Random.Range(0, totalWeight);
-        int runningWeight = 0;
-        foreach (var tile in _floorTiles)
-        {
-            runningWeight += tile.Weight;
-            if (rand < runningWeight) return tile.Prefab;
-        }
-        return _floorTiles[0].Prefab;
-    }
-
-    private GameObject GetRandomWallTile()
-    {
-        int totalWeight = 0;
-        foreach (var tile in _wallTiles) totalWeight += tile.Weight;
-        int rand = Random.Range(0, totalWeight);
-        int runningWeight = 0;
-        foreach (var tile in _wallTiles)
-        {
-            runningWeight += tile.Weight;
-            if (rand < runningWeight) return tile.Prefab;
-        }
-        return _wallTiles[0].Prefab;
     }
 
     #endregion
