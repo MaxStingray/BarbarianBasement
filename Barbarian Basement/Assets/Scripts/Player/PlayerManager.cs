@@ -103,10 +103,20 @@ public class PlayerManager : MonoBehaviour
                 //if there is a valid tile and something is standing on it
                 if (attackTargetTile != null && attackTargetTile.IsOccupied && attackTargetTile.OccupiedByCharacter)
                 {
-                    //attack the target
-                    _character.PlayHitEffect();
+
                     var target = attackTargetTile.OccupiedByCharacter;
-                    CombatUtils.Attack(_character, target);
+                    bool hit;
+                    CombatUtils.Attack(_character, target, out hit);
+                    if (hit)
+                    {
+                        //attack the target
+                        _character.PlayHitEffect();
+                        _character.HitConfirmSound();
+                    }
+                    else
+                    {
+                        _character.SwingSound();
+                    }
                     _playerUsedAction = true;
                     yield return new WaitForSeconds(CombatUtils.CombatTurnStartDelay);
                     break;

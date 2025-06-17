@@ -180,6 +180,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8079939047333688017}
   - component: {fileID: 4981006599292496628}
+  - component: {fileID: 1074297679192486865}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -215,7 +216,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f0df569c004e6204b84f1893a46df966, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  characterName: Cone-Ham the barbarian
+  audioSource: {fileID: 1074297679192486865}
+  swingSound: {fileID: 8300000, guid: 3d6e7c957a9dd574fac6bf8c88ba53f4, type: 3}
+  hitSound: {fileID: 8300000, guid: 9ad5e7dbdc17bee46a78f8423819cf2b, type: 3}
+  characterName: 
   BodyPoints: 8
   DefendDice: 2
   AttackDice: 3
@@ -224,6 +228,103 @@ MonoBehaviour:
   _hitEffectDuration: 0.2
   _shakeIntensity: 0.3
   _hitParticle: {fileID: 3080334766342750447}
+--- !u!82 &1074297679192486865
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2827473920937571136}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 0}
+  m_Resource: {fileID: 0}
+  m_PlayOnAwake: 0
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1 &7069200391663089263
 GameObject:
   m_ObjectHideFlags: 0

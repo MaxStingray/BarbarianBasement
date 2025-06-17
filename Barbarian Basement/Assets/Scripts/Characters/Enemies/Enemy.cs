@@ -141,13 +141,20 @@ public class Enemy : CharacterSheet
         var target = GameManager.Instance.Player;
         //play the attack animation
         AnimationUtils.ValidateAnimationAndPlay(animator, "Attack");
+
+        SwingSound();
         //wait for it to finish
         yield return AnimationUtils.AwaitAnimationComplete(animator, "Attack");
+        bool hit;
+        CombatUtils.Attack(this, target, out hit);
 
-        CombatUtils.Attack(this, target);
+        if (hit)
+        {
+            HitConfirmSound();
+        }
 
         //return to idle
-        AnimationUtils.ValidateAnimationAndPlay(animator, "Idle");
+            AnimationUtils.ValidateAnimationAndPlay(animator, "Idle");
 
         yield return null;
     }

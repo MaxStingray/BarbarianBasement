@@ -6,8 +6,9 @@ using UnityEngine;
 public static class CombatUtils
 {
     public static float CombatTurnStartDelay = 1f;
-    public static void Attack(CharacterSheet attacker, CharacterSheet target)
+    public static void Attack(CharacterSheet attacker, CharacterSheet target, out bool hit)
     {
+        hit = false;
         //attacker rolls attack die
         int hits = 0;
         for (int i = 0; i < attacker.AttackDice; i++)
@@ -34,6 +35,7 @@ public static class CombatUtils
 
         if (actualHits > 0)
         {
+            hit = true;
             target.TakeHits(actualHits);
         }
     }

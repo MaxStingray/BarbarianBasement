@@ -6,6 +6,9 @@ using UnityEngine;
 /// </summary>
 public abstract class CharacterSheet : MonoBehaviour
 {
+    [SerializeField] protected AudioSource audioSource;
+    [SerializeField] protected AudioClip swingSound;
+    [SerializeField] protected AudioClip hitSound;
     //The currently facing direction
     public Direction FacingDirection { get; set; }
 
@@ -128,7 +131,7 @@ public abstract class CharacterSheet : MonoBehaviour
 
         UpdateRotation();
     }
-    
+
     private void UpdateRotation()
     {
         float yRotation = GetYRotationForDirection(FacingDirection);
@@ -167,5 +170,22 @@ public abstract class CharacterSheet : MonoBehaviour
         }
 
         transform.rotation = targetRotation;
+    }
+
+    public void HitConfirmSound()
+    {
+        PlayAudioClip(hitSound);
+    }
+
+    public void SwingSound()
+    {
+        PlayAudioClip(swingSound);
+    }
+
+    protected void PlayAudioClip(AudioClip clip)
+    {
+        if (!audioSource) return;
+
+        audioSource.PlayOneShot(clip);
     }
 }

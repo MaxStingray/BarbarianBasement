@@ -3044,10 +3044,6 @@ PrefabInstance:
       value: Player
       objectReference: {fileID: 0}
     - target: {fileID: 4981006599292496628, guid: a759b3ae8a62da24aa878982d1651cf8, type: 3}
-      propertyPath: characterName
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 4981006599292496628, guid: a759b3ae8a62da24aa878982d1651cf8, type: 3}
       propertyPath: _postProcessingVolume
       value: 
       objectReference: {fileID: 2145956905}
