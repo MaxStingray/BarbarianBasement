@@ -12,7 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8e9582206b3675b4c84cfebad384a49a, type: 3}
   m_Name: PotionOfHealing1D6
   m_EditorClassIdentifier: 
-  itemName: 
+  itemName: Potion of Healing
   icon: {fileID: 0}
-  description: 
-  numberOfHealingDice: 0
+  description: A small bottle of bluish liquid. Restores the number of body points
+    equal to a roll of 1D6
+  numberOfHealingDice: 1
