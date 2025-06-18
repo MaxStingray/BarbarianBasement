@@ -13,8 +13,9 @@ MonoBehaviour:
   m_Name: BroadSword
   m_EditorClassIdentifier: 
   itemName: Broadsword
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: 19cd7c099ebd0774bb2addc2f4d6dc86, type: 3}
   description: This wide blade gives you the strength of three combat dice.
+  OnPickupAudio: {fileID: 0}
   statsToModify: 00000000
   statModifier: 3
   _conflictingItems: []

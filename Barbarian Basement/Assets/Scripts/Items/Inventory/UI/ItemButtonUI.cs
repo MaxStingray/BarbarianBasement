@@ -3,6 +3,7 @@ using UnityEngine;
 
 public abstract class ItemButtonUI : MonoBehaviour
 {
+    [SerializeField] protected Button button;
     [SerializeField] protected Image iconImage;
     protected Item item;
     //the UI that is displaying this button (player, container, etc)
@@ -12,6 +13,8 @@ public abstract class ItemButtonUI : MonoBehaviour
     {
         item = newItem;
         iconImage.sprite = item.icon;
+        inventoryUI = ui;
+        button.onClick.AddListener(OnClick);
     }
 
     public abstract void OnClick();

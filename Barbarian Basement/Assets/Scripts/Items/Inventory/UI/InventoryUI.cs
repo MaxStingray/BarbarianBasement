@@ -22,6 +22,7 @@ public abstract class InventoryUI : MonoBehaviour
     public virtual void OnEnable()
     {
         Inventory.OnInventoryChanged.AddListener(UpdateUI);
+        UpdateUI();
     }
 
     public virtual void UpdateUI()

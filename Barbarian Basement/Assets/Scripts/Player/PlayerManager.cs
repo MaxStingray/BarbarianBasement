@@ -8,6 +8,8 @@ public class PlayerManager : MonoBehaviour
 
     [SerializeField] private Player _character;
 
+    [SerializeField] private GameObject _inventoryWindow;
+
     private Coroutine _playerActionCoroutine;
 
     void Awake()
@@ -62,6 +64,15 @@ public class PlayerManager : MonoBehaviour
     {
         while (!_playerMoved && !_playerUsedAction)
         {
+            
+            if (Input.GetKeyDown(KeyCode.I))
+            {
+                var windowState = _inventoryWindow.activeInHierarchy;
+
+                _inventoryWindow.SetActive(!windowState);
+            }
+            
+
             if (Input.GetKeyDown(KeyCode.D))
             {
                 _character.Turn(clockwise: true);

@@ -7,6 +7,7 @@ public abstract class Item : ScriptableObject
     public string itemName;
     public Sprite icon;
     public string description;
+    public AudioClip OnPickupAudio;
 
     public virtual void UseItem(CharacterSheet characterSheet)
     {
