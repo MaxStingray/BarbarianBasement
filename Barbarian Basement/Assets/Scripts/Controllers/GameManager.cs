@@ -14,7 +14,10 @@ public class GameManager : MonoBehaviour
     private GameObject _spawnedStairs;
 
     [SerializeField] private EnemyManager _enemyManager;
+    [SerializeField] private PlayerManager _playerManager;
+    public PlayerManager PlayerManager => _playerManager;
     [SerializeField] private InteractableManager _interactableManager;
+
 
     [SerializeField] private StatsPanel _statsPanel;
     public StatsPanel StatsPanel => _statsPanel;

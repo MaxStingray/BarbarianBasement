@@ -95,7 +95,6 @@ public class PlayerManager : MonoBehaviour
                     if (moved)
                     {
                         _playerMoved = true;
-                        //yield return new WaitUntil(() => !Input.GetKey(KeyCode.W));
                         break;
                     }
                 }
@@ -107,7 +106,7 @@ public class PlayerManager : MonoBehaviour
 
             if (Input.GetKeyDown(KeyCode.Space))
             {
-                yield return AttackRoutine();
+                yield return StartCoroutine(AttackRoutine());
             }
             // attempt interaction
             if (Input.GetKeyDown(KeyCode.E))
@@ -132,19 +131,19 @@ public class PlayerManager : MonoBehaviour
 
         GameTile interactionTile = null;
 
-        // Case 1: Interactable in front (normal)
+        //Case 1: Interactable in front
         if (targetTile != null && targetTile.IsOccupied && targetTile.OccupiedByInteractable != null)
         {
             interactionTile = targetTile;
         }
-        // Case 2: Door on the current tile's wall (e.g. facing out from this tile)
+        //Case 2: Door on the current tile's wall (e.g. facing out from this tile)
         else if (currentTile.HasDoor &&
                 currentTile.OccupiedByInteractable is Door door &&
                 door.WallDirection == facing)
         {
             interactionTile = currentTile;
         }
-        // ✅ Case 3: Door on the target tile, facing *back* toward us
+        //Case 3: Door on the target tile, facing bacl toward us
         else if (targetTile != null &&
                 targetTile.HasDoor &&
                 targetTile.OccupiedByInteractable is Door doorBack &&
@@ -164,6 +163,10 @@ public class PlayerManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// attacks with the currently active player - standard attack (not using a weapon)
+    /// </summary>
+    /// <returns></returns>
     private IEnumerator AttackRoutine()
     {
         var attackTargetTile = MoveUtils.GetTargetTile(_character.CurrentTile,
@@ -175,23 +178,18 @@ public class PlayerManager : MonoBehaviour
 
             var target = attackTargetTile.OccupiedByCharacter;
             bool hit;
-            CombatUtils.Attack(_character, target, out hit);
-            if (hit)
-            {
-                //attack the target
-                _character.PlayHitEffect();
-                _character.HitConfirmSound();
-            }
-            else
-            {
-                _character.SwingSound();
-            }
-            _playerUsedAction = true;
-            yield return new WaitForSeconds(CombatUtils.CombatTurnStartDelay);
+            CombatUtils.Attack(_character.CurrentAttackDice, _character, target, out hit);
+            yield return StartCoroutine(CombatUtils.PlayCharacterAttackEffects(_character, hit));
+            SetUsedAction();
         }
         else
         {
             Debug.Log("no valid target");
         }
+    }
+
+    public void SetUsedAction()
+    {
+        _playerUsedAction = true;
     }
 }

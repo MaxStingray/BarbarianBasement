@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 797a3f39cf4254e4c90442598112e53b, type: 3}
+  m_Name: BattleAxe
+  m_EditorClassIdentifier: 
+  itemName: Battle Axe
+  icon: {fileID: 21300000, guid: d16680fd70d95064d908547b87dad7de, type: 3}
+  description: The battle axe allows you to roll 4 attack dice. You cannot use the
+    battle axe if you have a shield equipped.
+  OnPickupAudio: {fileID: 0}
+  AttackDice: 4
+  Range: 0
+  WeaponType: 0
+  ConflictingItems:
+  - {fileID: 11400000, guid: bf0df8bd14d9c54408ab38a25933e947, type: 2}

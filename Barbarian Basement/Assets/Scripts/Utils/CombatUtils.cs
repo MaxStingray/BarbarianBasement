@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 /// <summary>
@@ -6,29 +7,25 @@ using UnityEngine;
 public static class CombatUtils
 {
     public static float CombatTurnStartDelay = 1f;
-    public static void Attack(CharacterSheet attacker, CharacterSheet target, out bool hit)
+    public static void Attack(int attackDice, CharacterSheet attacker, CharacterSheet target, out bool hit)
     {
         hit = false;
-        //attacker rolls attack die
         int hits = 0;
-        for (int i = 0; i < attacker.CurrentAttackDice; i++)
+        for (int i = 0; i < attackDice; i++)
         {
             if (RollAttackDie())
-            {
                 hits++;
-            }
         }
 
         int blocks = 0;
         for (int i = 0; i < target.CurrentDefendDice; i++)
         {
             if (RollDefenceDie(target is Enemy))
-            {
                 blocks++;
-            }
         }
 
         int actualHits = hits - blocks;
+
         Debug.Log($"{attacker.CharacterName}: {hits} hits");
         Debug.Log($"{target.CharacterName}: {blocks} blocks");
         Debug.Log($"{target.CharacterName} takes {Mathf.Max(0, actualHits)} damage!");
@@ -156,5 +153,77 @@ public static class CombatUtils
         }
 
         return true;
+    }
+
+    /// <summary>
+    /// checks if there is a valid target in range and returns its game tile if so
+    /// </summary>
+    /// <param name="attacker"></param>
+    /// <param name="range"></param>
+    /// <param name="targetTile">the tile the target is occupying</param>
+    /// <returns></returns>
+    public static bool ValidTargetForRanged(CharacterSheet attacker, int range, GameTile[,] grid, out GameTile targetTile)
+    {
+        //placeholder code
+        targetTile = null;
+
+        GameTile currentTile = attacker.CurrentTile;
+        Direction direction = attacker.FacingDirection;
+
+        int steps = 0;
+
+        while (true)
+        {
+            GameTile nextTile = MoveUtils.GetTargetTile(currentTile, direction, grid);
+
+            //ensure a valid tile
+            if (nextTile == null)
+            {
+                return false;
+            }
+
+            //check whether the next move will be blocked by a wall or obstacle
+            if (currentTile.IsBlocked(direction) || nextTile.IsBlocked(MoveUtils.GetOppositeDirection(direction)))
+            {
+                return false;
+            }
+
+            if (nextTile.IsOccupied && nextTile.OccupiedByCharacter != null)
+            {
+                targetTile = nextTile;
+                return true;
+            }
+
+            //move to the next step
+            steps++;
+
+            //check range
+            if (range > 0 && steps >= range)
+                return false;
+
+            currentTile = nextTile;
+        }
+
+    }
+
+    /// <summary>
+    /// plays the attack sfx and visuals related to the current character class
+    /// </summary>
+    /// <param name="attacker"></param>
+    /// <param name="hit"></param>
+    /// <returns></returns>
+    public static IEnumerator PlayCharacterAttackEffects(Player attacker, bool hit)
+    {
+        if (hit)
+        {
+            attacker.PlayHitEffect();
+            attacker.HitConfirmSound();
+        }
+        else
+        {
+            attacker.SwingSound();
+        }
+
+        yield return new WaitForSeconds(CombatTurnStartDelay);
     }
 }

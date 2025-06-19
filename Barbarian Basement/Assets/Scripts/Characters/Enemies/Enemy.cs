@@ -146,7 +146,7 @@ public class Enemy : CharacterSheet
         //wait for it to finish
         yield return AnimationUtils.AwaitAnimationComplete(animator, "Attack");
         bool hit;
-        CombatUtils.Attack(this, target, out hit);
+        CombatUtils.Attack(this.CurrentAttackDice, this, target, out hit);
 
         if (hit)
         {
