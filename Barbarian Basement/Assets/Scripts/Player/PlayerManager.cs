@@ -64,14 +64,14 @@ public class PlayerManager : MonoBehaviour
     {
         while (!_playerMoved && !_playerUsedAction)
         {
-            
+
             if (Input.GetKeyDown(KeyCode.I))
             {
                 var windowState = _inventoryWindow.activeInHierarchy;
 
                 _inventoryWindow.SetActive(!windowState);
             }
-            
+
 
             if (Input.GetKeyDown(KeyCode.D))
             {
@@ -107,35 +107,7 @@ public class PlayerManager : MonoBehaviour
 
             if (Input.GetKeyDown(KeyCode.Space))
             {
-                //get the next tile
-                var attackTargetTile = MoveUtils.GetTargetTile(_character.CurrentTile,
-                    _character.FacingDirection, GameManager.Instance.FinalGrid);
-
-                //if there is a valid tile and something is standing on it
-                if (attackTargetTile != null && attackTargetTile.IsOccupied && attackTargetTile.OccupiedByCharacter)
-                {
-
-                    var target = attackTargetTile.OccupiedByCharacter;
-                    bool hit;
-                    CombatUtils.Attack(_character, target, out hit);
-                    if (hit)
-                    {
-                        //attack the target
-                        _character.PlayHitEffect();
-                        _character.HitConfirmSound();
-                    }
-                    else
-                    {
-                        _character.SwingSound();
-                    }
-                    _playerUsedAction = true;
-                    yield return new WaitForSeconds(CombatUtils.CombatTurnStartDelay);
-                    break;
-                }
-                else
-                {
-                    Debug.Log("no valid target");
-                }
+                yield return AttackRoutine();
             }
             // attempt interaction
             if (Input.GetKeyDown(KeyCode.E))
@@ -189,6 +161,37 @@ public class PlayerManager : MonoBehaviour
         else
         {
             Debug.Log("nothing to interact with");
+        }
+    }
+
+    private IEnumerator AttackRoutine()
+    {
+        var attackTargetTile = MoveUtils.GetTargetTile(_character.CurrentTile,
+        _character.FacingDirection, GameManager.Instance.FinalGrid);
+
+        //if there is a valid tile and something is standing on it
+        if (attackTargetTile != null && attackTargetTile.IsOccupied && attackTargetTile.OccupiedByCharacter)
+        {
+
+            var target = attackTargetTile.OccupiedByCharacter;
+            bool hit;
+            CombatUtils.Attack(_character, target, out hit);
+            if (hit)
+            {
+                //attack the target
+                _character.PlayHitEffect();
+                _character.HitConfirmSound();
+            }
+            else
+            {
+                _character.SwingSound();
+            }
+            _playerUsedAction = true;
+            yield return new WaitForSeconds(CombatUtils.CombatTurnStartDelay);
+        }
+        else
+        {
+            Debug.Log("no valid target");
         }
     }
 }

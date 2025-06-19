@@ -12,7 +12,7 @@ public class StatsPanel : MonoBehaviour
     {
         _nameField.text = $"{player.CharacterName}";
         _bodyPointsField.text = $"Body points: {player.CurrentBodyPoints}";
-        _attackDiceField.text = $"Attack dice: {player.AttackDice}";
-        _defendDice.text = $"Defend Dice: {player.DefendDice}";
+        _attackDiceField.text = $"Attack dice: {player.CurrentAttackDice}";
+        _defendDice.text = $"Defend Dice: {player.CurrentDefendDice}";
     }
 }

@@ -41,6 +41,8 @@ public class Equipment : Item
                     break;
             }
         }
+
+        GameManager.Instance.StatsPanel.UpdateStatsPanel(GameManager.Instance.Player);
     }
 
     public void OnUnequip(CharacterSheet characterSheet)
