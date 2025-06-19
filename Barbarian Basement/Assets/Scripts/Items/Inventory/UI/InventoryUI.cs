@@ -11,6 +11,8 @@ public abstract class InventoryUI : MonoBehaviour
     public Transform ItemButtonParent;
     public GameObject ItemButtonPrefab;
 
+    [SerializeField] protected GameObject itemPreview;
+
     [SerializeField] protected TextMeshProUGUI nameText;
     [SerializeField] protected TextMeshProUGUI descriptionText;
     [SerializeField] protected Image iconImage;
@@ -49,5 +51,10 @@ public abstract class InventoryUI : MonoBehaviour
         nameText.text = item.itemName;
         descriptionText.text = item.description;
         iconImage.sprite = item.icon;
+    }
+
+    protected virtual void SetPreviewWindowState(bool show)
+    {
+        itemPreview.SetActive(show);
     }
 }

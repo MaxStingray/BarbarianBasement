@@ -155,7 +155,7 @@ public class PlayerManager : MonoBehaviour
         if (interactionTile != null)
         {
             interactionTile.OccupiedByInteractable.StartInteraction();
-            _playerUsedAction = true;
+            SetUsedAction();
         }
         else
         {

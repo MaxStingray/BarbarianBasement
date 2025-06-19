@@ -20,6 +20,8 @@ public class Weapon : Item
     public Item[] ConflictingItems;
     protected override void OnUse(CharacterSheet characterSheet)
     {
+        if (TurnManager.Instance.CurrentTurn != Turn.Player) return;
+        
         if (characterSheet is not Player player) return;
 
         Debug.Log($"attacked with {itemName}!");
