@@ -578,31 +578,38 @@ public class DunGen : MonoBehaviour
             for (int y = 0; y < Cols; y++)
             {
                 GameTile tile = grid[x, y];
+                if (!tile.IsFloor) continue; // skip unused tiles
+
                 GameObject prefab = DungeonUtils.GetRandomWallTile(_wallTiles);
 
-                // Only instantiate a wall if no door is blocking that direction
-                if (tile.NorthWall && !(tile.OccupiedByInteractable is Door d1 && d1.WallDirection == Direction.North))
+                // Instantiate only outer walls of valid floor tiles
+                if (tile.NorthWall && !IsBlockingDoor(tile, Direction.North))
                 {
                     Vector3 wallPos = tile.Position + new Vector3(0, 0, 2);
                     Instantiate(prefab, wallPos, Quaternion.Euler(0, 180, 0), wallRoot.transform);
                 }
-                if (tile.SouthWall && !(tile.OccupiedByInteractable is Door d2 && d2.WallDirection == Direction.South))
+                if (tile.SouthWall && !IsBlockingDoor(tile, Direction.South))
                 {
                     Vector3 wallPos = tile.Position + new Vector3(0, 0, -2);
                     Instantiate(prefab, wallPos, Quaternion.identity, wallRoot.transform);
                 }
-                if (tile.EastWall && !(tile.OccupiedByInteractable is Door d3 && d3.WallDirection == Direction.East))
+                if (tile.EastWall && !IsBlockingDoor(tile, Direction.East))
                 {
                     Vector3 wallPos = tile.Position + new Vector3(2, 0, 0);
                     Instantiate(prefab, wallPos, Quaternion.Euler(0, -90, 0), wallRoot.transform);
                 }
-                if (tile.WestWall && !(tile.OccupiedByInteractable is Door d4 && d4.WallDirection == Direction.West))
+                if (tile.WestWall && !IsBlockingDoor(tile, Direction.West))
                 {
                     Vector3 wallPos = tile.Position + new Vector3(-2, 0, 0);
                     Instantiate(prefab, wallPos, Quaternion.Euler(0, 90, 0), wallRoot.transform);
                 }
             }
         }
+    }
+
+    private bool IsBlockingDoor(GameTile tile, Direction dir)
+    {
+        return tile.OccupiedByInteractable is Door d && d.WallDirection == dir;
     }
 
     /// <summary>
