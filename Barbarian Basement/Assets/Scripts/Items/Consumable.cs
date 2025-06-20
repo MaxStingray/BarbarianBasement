@@ -8,5 +8,10 @@ public abstract class Consumable : Item
         {
             characterSheet.Inventory.RemoveItem(this);
         }
+
+        if (characterSheet is Player player)
+        {
+            GameManager.Instance.StatsPanel.UpdateStatsPanel(player);
+        }
     }
 }

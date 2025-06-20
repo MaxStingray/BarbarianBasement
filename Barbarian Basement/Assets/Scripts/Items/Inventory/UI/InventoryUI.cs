@@ -17,6 +17,8 @@ public abstract class InventoryUI : MonoBehaviour
     [SerializeField] protected TextMeshProUGUI descriptionText;
     [SerializeField] protected Image iconImage;
 
+    [SerializeField] protected Sprite defaultSprite;
+
     protected Item selectedItem;
 
     protected Item previousItem;
@@ -51,10 +53,19 @@ public abstract class InventoryUI : MonoBehaviour
         {
             previousItem = selectedItem;
         }
+        SetPreviewWindowState(true);
         selectedItem = item;
         nameText.text = item.itemName;
         descriptionText.text = item.description;
         iconImage.sprite = item.icon;
+    }
+
+    public virtual void ClearItemDetails()
+    {
+        selectedItem = null;
+        nameText.text = "";
+        descriptionText.text = "";
+        iconImage.sprite = defaultSprite;
     }
 
     protected virtual void SetPreviewWindowState(bool show)

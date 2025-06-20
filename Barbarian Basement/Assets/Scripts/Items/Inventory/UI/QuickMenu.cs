@@ -18,6 +18,6 @@ public class QuickMenu : MonoBehaviour
 
     public void AssignButton3(Item item)
     {
-        _button2.Assign(item);
+        _button3.Assign(item);
     }
 }

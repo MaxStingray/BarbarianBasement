@@ -66,15 +66,20 @@ public class Weapon : Item
 
     private IEnumerator TryRangedAttack(Player player)
     {
-        if (CombatUtils.ValidTargetForRanged(player, Range ,GameManager.Instance.FinalGrid, out GameTile target))
+        if (CombatUtils.ValidTargetForRanged(player, Range, GameManager.Instance.FinalGrid, out GameTile target))
         {
             CombatUtils.Attack(AttackDice, player, target.OccupiedByCharacter, out bool hit);
-            if (hit)
-            {
-                //sfx, sounds etc here
-            }
-            yield return null;
+
+            yield return GameManager.Instance.StartCoroutine(CombatUtils.PlayCharacterAttackEffects(player, hit));
+
+            GameManager.Instance.PlayerManager.SetUsedAction();
         }
+        else
+        {
+            Debug.Log("No target in range");
+        }
+
+        _isUsing = false;
     }
 
     /// <summary>
