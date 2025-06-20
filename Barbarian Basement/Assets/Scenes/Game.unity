@@ -2161,6 +2161,26 @@ PrefabInstance:
       propertyPath: _dungeonRoot
       value: 
       objectReference: {fileID: 1624908213}
+    - target: {fileID: 6689470085023299317, guid: 2c02b856e1274ed48ba422a9dbf46fc7, type: 3}
+      propertyPath: _floorTiles.Array.data[0].Weight
+      value: 90
+      objectReference: {fileID: 0}
+    - target: {fileID: 6689470085023299317, guid: 2c02b856e1274ed48ba422a9dbf46fc7, type: 3}
+      propertyPath: _floorTiles.Array.data[1].Weight
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 6689470085023299317, guid: 2c02b856e1274ed48ba422a9dbf46fc7, type: 3}
+      propertyPath: _floorTiles.Array.data[2].Weight
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 6689470085023299317, guid: 2c02b856e1274ed48ba422a9dbf46fc7, type: 3}
+      propertyPath: _floorTiles.Array.data[3].Weight
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 6689470085023299317, guid: 2c02b856e1274ed48ba422a9dbf46fc7, type: 3}
+      propertyPath: _floorTiles.Array.data[4].Weight
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 8202598473992268908, guid: 2c02b856e1274ed48ba422a9dbf46fc7, type: 3}
       propertyPath: m_LocalPosition.x
       value: -229.26422
