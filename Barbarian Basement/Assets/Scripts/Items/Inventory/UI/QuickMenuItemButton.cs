@@ -19,7 +19,6 @@ public class QuickMenuItemButton : MonoBehaviour
     {
         _iconImage.sprite = null;
         _button.onClick.RemoveAllListeners();
-        Destroy(_assignedItem);
         _assignedItem = null;
     }
 

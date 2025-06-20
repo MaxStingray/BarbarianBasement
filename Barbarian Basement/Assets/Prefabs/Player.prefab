@@ -181,6 +181,7 @@ GameObject:
   - component: {fileID: 8079939047333688017}
   - component: {fileID: 4981006599292496628}
   - component: {fileID: 1074297679192486865}
+  - component: {fileID: 4533402270166810403}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -220,9 +221,10 @@ MonoBehaviour:
   swingSound: {fileID: 8300000, guid: 3d6e7c957a9dd574fac6bf8c88ba53f4, type: 3}
   hitSound: {fileID: 8300000, guid: 9ad5e7dbdc17bee46a78f8423819cf2b, type: 3}
   characterName: 
+  Inventory: {fileID: 4533402270166810403}
   BodyPoints: 8
   DefendDice: 2
-  AttackDice: 3
+  AttackDice: 1
   _cameraHolder: {fileID: 8079939047333688017}
   _postProcessingVolume: {fileID: 0}
   _hitEffectDuration: 0.2
@@ -325,6 +327,26 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &4533402270166810403
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2827473920937571136}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a3941e239d0a5654f938a7bf0d7b5f95, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Items:
+  - {fileID: 11400000, guid: fe82344bc45487e498651c246a5b349e, type: 2}
+  OnInventoryChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  OnInventoryChangeRefused:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &7069200391663089263
 GameObject:
   m_ObjectHideFlags: 0

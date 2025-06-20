@@ -1,7 +1,29 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerInventory : Inventory
 {
+    private List<Item> quickSlotItems;
+
+    
+    public void AddItemToQuickSlot(Item item)
+    {
+        RemoveItem(item);
+        quickSlotItems.Add(item);
+    }
+
+    public void ClearQuickSlots()
+    {
+        if (quickSlotItems.Count == 0) return;
+
+        foreach (var item in quickSlotItems)
+        {
+            AddItem(item);
+        }
+
+        quickSlotItems.Clear(); 
+    }
+
     public override void AddItem(Item item)
     {
         // don't add to inventory if it's armour and we already have it

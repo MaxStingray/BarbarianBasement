@@ -60,16 +60,19 @@ public class PlayerInventoryUI : InventoryUI
     private void AssignToSlot1()
     {
         _quickMenu.AssignButton1(selectedItem);
+        GameManager.Instance.Player.Inventory.RemoveItem(selectedItem);
         SetPreviewWindowState(true);
     }
     private void AssignToSlot2()
     {
         _quickMenu.AssignButton2(selectedItem);
+        GameManager.Instance.Player.Inventory.RemoveItem(selectedItem);
         SetPreviewWindowState(true);
     }
     private void AssignToSlot3()
     {
         _quickMenu.AssignButton3(selectedItem);
+        GameManager.Instance.Player.Inventory.RemoveItem(selectedItem);
         SetPreviewWindowState(true);
     }
 }

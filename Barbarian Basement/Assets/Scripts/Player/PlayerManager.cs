@@ -3,7 +3,6 @@ using UnityEngine;
 
 public class PlayerManager : MonoBehaviour
 {
-    private bool _playerMoved;
     private bool _playerUsedAction;
 
     [SerializeField] private Player _character;
@@ -11,6 +10,8 @@ public class PlayerManager : MonoBehaviour
     [SerializeField] private GameObject _inventoryWindow;
 
     private Coroutine _playerActionCoroutine;
+
+    public bool CanAct => TurnManager.Instance.CurrentTurn == Turn.Player && !_playerUsedAction;
 
     void Awake()
     {
@@ -47,7 +48,6 @@ public class PlayerManager : MonoBehaviour
 
     private void HandleTurnStart()
     {
-        _playerMoved = false;
         _playerUsedAction = false;
 
         // Stop any existing coroutine
@@ -62,7 +62,7 @@ public class PlayerManager : MonoBehaviour
 
     IEnumerator AwaitAction()
     {
-        while (!_playerMoved && !_playerUsedAction)
+        while (CanAct)
         {
 
             if (Input.GetKeyDown(KeyCode.I))
@@ -94,7 +94,7 @@ public class PlayerManager : MonoBehaviour
                     bool moved = _character.AttemptMove(targetTile);
                     if (moved)
                     {
-                        _playerMoved = true;
+                        SetUsedAction();
                         break;
                     }
                 }

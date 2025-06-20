@@ -17,14 +17,19 @@ public class Weapon : Item
 
     public WeaponType WeaponType;
 
+    //is the weapon currently being used?
+    private bool _isUsing;
+
     public Item[] ConflictingItems;
     protected override void OnUse(CharacterSheet characterSheet)
     {
-        if (TurnManager.Instance.CurrentTurn != Turn.Player) return;
-        
+        //checks to make sure a weapon can't be used at the wrong time
+        if (TurnManager.Instance.CurrentTurn != Turn.Player) return;      
         if (characterSheet is not Player player) return;
+        if (!GameManager.Instance.PlayerManager.CanAct) return;
+        if (_isUsing) return;
 
-        Debug.Log($"attacked with {itemName}!");
+        _isUsing = true;
 
         switch (WeaponType)
         {
@@ -80,6 +85,7 @@ public class Weapon : Item
     {
         CombatUtils.Attack(AttackDice, player, target, out bool hit);
         yield return GameManager.Instance.StartCoroutine(CombatUtils.PlayCharacterAttackEffects(player, hit));
+        _isUsing = false;
         GameManager.Instance.PlayerManager.SetUsedAction();
     }
 }
