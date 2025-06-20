@@ -2158,18 +2158,6 @@ PrefabInstance:
       value: Dungen
       objectReference: {fileID: 0}
     - target: {fileID: 6689470085023299317, guid: 2c02b856e1274ed48ba422a9dbf46fc7, type: 3}
-      propertyPath: Cols
-      value: 30
-      objectReference: {fileID: 0}
-    - target: {fileID: 6689470085023299317, guid: 2c02b856e1274ed48ba422a9dbf46fc7, type: 3}
-      propertyPath: Rows
-      value: 30
-      objectReference: {fileID: 0}
-    - target: {fileID: 6689470085023299317, guid: 2c02b856e1274ed48ba422a9dbf46fc7, type: 3}
-      propertyPath: _doorPrefab
-      value: 
-      objectReference: {fileID: 7321394015853581805, guid: da9db64542c4aca4bab60a59757c01b8, type: 3}
-    - target: {fileID: 6689470085023299317, guid: 2c02b856e1274ed48ba422a9dbf46fc7, type: 3}
       propertyPath: _dungeonRoot
       value: 
       objectReference: {fileID: 1624908213}
@@ -2471,10 +2459,6 @@ PrefabInstance:
       propertyPath: m_Camera
       value: 
       objectReference: {fileID: 854322652}
-    - target: {fileID: 3503082493596740893, guid: 3bb651749ebaaca42b752e9f43ff287e, type: 3}
-      propertyPath: m_RenderMode
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 3825091362126181605, guid: 3bb651749ebaaca42b752e9f43ff287e, type: 3}
       propertyPath: m_Pivot.x
       value: 0
@@ -2505,18 +2489,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3825091362126181605, guid: 3bb651749ebaaca42b752e9f43ff287e, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3825091362126181605, guid: 3bb651749ebaaca42b752e9f43ff287e, type: 3}
-      propertyPath: m_LocalScale.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3825091362126181605, guid: 3bb651749ebaaca42b752e9f43ff287e, type: 3}
-      propertyPath: m_LocalScale.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3825091362126181605, guid: 3bb651749ebaaca42b752e9f43ff287e, type: 3}
-      propertyPath: m_LocalScale.z
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3825091362126181605, guid: 3bb651749ebaaca42b752e9f43ff287e, type: 3}
@@ -2570,10 +2542,6 @@ PrefabInstance:
     - target: {fileID: 6886353626823429124, guid: 3bb651749ebaaca42b752e9f43ff287e, type: 3}
       propertyPath: m_Name
       value: MainMenu
-      objectReference: {fileID: 0}
-    - target: {fileID: 6886353626823429124, guid: 3bb651749ebaaca42b752e9f43ff287e, type: 3}
-      propertyPath: m_IsActive
-      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
