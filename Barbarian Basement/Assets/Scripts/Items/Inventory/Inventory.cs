@@ -4,6 +4,7 @@ using UnityEngine.Events;
 
 public abstract class Inventory : MonoBehaviour
 {
+    public int Gold;
     public List<Item> Items = new List<Item>();
 
     public UnityEvent OnInventoryChanged = new UnityEvent();

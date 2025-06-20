@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 7866357416524851923}
   - component: {fileID: 7112897990743168817}
   - component: {fileID: 463981632688916115}
+  - component: {fileID: 3580291391268304883}
   m_Layer: 0
   m_Name: Chest
   m_TagString: Untagged
@@ -61,6 +62,7 @@ MonoBehaviour:
     IsOccupied: 0
     OccupiedByCharacter: {fileID: 0}
     OccupiedByInteractable: {fileID: 0}
+  _inventory: {fileID: 3580291391268304883}
 --- !u!82 &463981632688916115
 AudioSource:
   m_ObjectHideFlags: 0
@@ -158,6 +160,26 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &3580291391268304883
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3398432789164919565}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 90207cd1ba8513e48a3d88ea50c894fc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Gold: 0
+  Items: []
+  OnInventoryChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  OnInventoryChangeRefused:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &6311136429723582134
 GameObject:
   m_ObjectHideFlags: 0

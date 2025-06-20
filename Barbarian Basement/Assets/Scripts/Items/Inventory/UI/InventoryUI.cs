@@ -23,8 +23,12 @@ public abstract class InventoryUI : MonoBehaviour
 
     public virtual void OnEnable()
     {
-        Inventory.OnInventoryChanged.AddListener(UpdateUI);
-        UpdateUI();
+        //sometimes initialisation is handled elsewhere, so only do this if inventory is already assigned
+        if (Inventory)
+        {
+            Inventory.OnInventoryChanged.AddListener(UpdateUI);
+            UpdateUI();
+        }
     }
 
     public virtual void UpdateUI()
