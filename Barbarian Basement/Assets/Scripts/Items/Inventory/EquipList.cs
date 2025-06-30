@@ -41,7 +41,7 @@ public class EquipList : MonoBehaviour
                 AccessorySlots.Add(slot);
                 break;
         }
-
+        Debug.Log("Total equipped: " + character.EquipList.AllEquippedItems.Count);
         OnEquipmentChanged.Invoke();
     }
 

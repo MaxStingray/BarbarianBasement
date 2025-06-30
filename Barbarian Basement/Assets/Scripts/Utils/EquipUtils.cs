@@ -9,10 +9,13 @@ public static class EquipUtils
         if (character.EquipList.AllEquippedItems.Count == 0) return;
 
         var itemList = character.EquipList.AllEquippedItems;
+        var HighestOverrideDef = HighestOverride(itemList, StatsToModify.DefendDice);
+        var HighestOverrideAtk = HighestOverride(itemList, StatsToModify.AttackDice);
 
-        //first, apply the highest overwrite value currently equipped
-        var finalDefend = HighestOverride(itemList, StatsToModify.DefendDice);
-        var finalAttack = HighestOverride(itemList, StatsToModify.AttackDice);
+            //first, apply the highest overwrite value currently equipped
+        var finalDefend = HighestOverrideDef > 0 ? HighestOverrideDef : character.CurrentDefendDice;
+        var finalAttack = HighestOverrideAtk > 0 ? HighestOverrideAtk : character.CurrentAttackDice;
+
         foreach (var item in itemList)
         {
             foreach (var modifier in item.StatModifiers)
