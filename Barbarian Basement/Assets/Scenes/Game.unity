@@ -2242,6 +2242,10 @@ PrefabInstance:
       propertyPath: _quickMenu
       value: 
       objectReference: {fileID: 1996626124}
+    - target: {fileID: 409455996163176099, guid: 3fe44ff7fae962444ae83553442f5aff, type: 3}
+      propertyPath: EquipList
+      value: 
+      objectReference: {fileID: 4844683155245288111}
     - target: {fileID: 4577267938900626437, guid: 3fe44ff7fae962444ae83553442f5aff, type: 3}
       propertyPath: m_Pivot.x
       value: 0
@@ -2629,6 +2633,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a759b3ae8a62da24aa878982d1651cf8, type: 3}
+--- !u!114 &4844683155245288111 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 675438183954611569, guid: a759b3ae8a62da24aa878982d1651cf8, type: 3}
+  m_PrefabInstance: {fileID: 4844683155245288110}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4194484f1eb12df4aa5bc04218d33d11, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &5556515696717242353
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -23,6 +23,8 @@ public abstract class CharacterSheet : MonoBehaviour
 
     public Inventory Inventory;
 
+    public EquipList EquipList;
+
     //Basic stats (yeah it's HeroQuest)
     public int BodyPoints = 8;
     public int DefendDice = 2;

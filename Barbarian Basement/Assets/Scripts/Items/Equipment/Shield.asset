@@ -16,7 +16,7 @@ MonoBehaviour:
   icon: {fileID: 21300000, guid: fb590bbc67dca92438740b3d7c53e857, type: 3}
   description: The shield gives you one extra defend die.
   OnPickupAudio: {fileID: 0}
-  _statsToModify: 01000000
+  _equipSlot: 2
   _statModifiers:
   - stat: 1
     modificationType: 0

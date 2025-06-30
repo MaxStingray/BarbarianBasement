@@ -16,7 +16,7 @@ MonoBehaviour:
   icon: {fileID: 21300000, guid: 6d3efac5ba264974993e491fda274636, type: 3}
   description: The bracers allow you to roll one extra defend die.
   OnPickupAudio: {fileID: 0}
-  _statsToModify: 01000000
+  _equipSlot: 2
   _statModifiers:
   - stat: 1
     modificationType: 0

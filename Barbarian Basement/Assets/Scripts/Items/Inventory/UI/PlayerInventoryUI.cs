@@ -1,9 +1,9 @@
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class PlayerInventoryUI : InventoryUI
 {
+    [SerializeField] private EquipmentUI _equipUI;
     public Button AddToQuickMenuButton;
     public Button EquipButton;
 
@@ -54,7 +54,10 @@ public class PlayerInventoryUI : InventoryUI
 
     private void OnEquipButtonClicked()
     {
-        selectedItem.UseItem(GameManager.Instance.Player);
+        if (selectedItem is Equipment equipment)
+        {
+            _equipUI.OnClickEquip(equipment);
+        }
     }
 
     private void AssignToSlot1()

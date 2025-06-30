@@ -1,6 +1,7 @@
 using UnityEngine.UI;
 using TMPro;
 using UnityEngine;
+using Unity.VisualScripting;
 
 /// <summary>
 /// a UI that displays an inventory (player, container, merchant etc)
@@ -31,6 +32,11 @@ public abstract class InventoryUI : MonoBehaviour
             Inventory.OnInventoryChanged.AddListener(UpdateUI);
             UpdateUI();
         }
+    }
+
+    public virtual void OnDisable()
+    {
+        Inventory.OnInventoryChanged.RemoveListener(UpdateUI);
     }
 
     public virtual void UpdateUI()

@@ -182,6 +182,7 @@ GameObject:
   - component: {fileID: 4981006599292496628}
   - component: {fileID: 1074297679192486865}
   - component: {fileID: 4533402270166810403}
+  - component: {fileID: 675438183954611569}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -222,6 +223,7 @@ MonoBehaviour:
   hitSound: {fileID: 8300000, guid: 9ad5e7dbdc17bee46a78f8423819cf2b, type: 3}
   characterName: 
   Inventory: {fileID: 4533402270166810403}
+  EquipList: {fileID: 675438183954611569}
   BodyPoints: 8
   DefendDice: 2
   AttackDice: 2
@@ -346,6 +348,23 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   OnInventoryChangeRefused:
+    m_PersistentCalls:
+      m_Calls: []
+--- !u!114 &675438183954611569
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2827473920937571136}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4194484f1eb12df4aa5bc04218d33d11, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  AccessorySlots: []
+  AllEquippedItems: []
+  OnEquipmentChanged:
     m_PersistentCalls:
       m_Calls: []
 --- !u!1 &7069200391663089263
