@@ -2,6 +2,7 @@ using UnityEngine.UI;
 using TMPro;
 using UnityEngine;
 using Unity.VisualScripting;
+using UnityEditor.Compilation;
 
 /// <summary>
 /// a UI that displays an inventory (player, container, merchant etc)
@@ -52,6 +53,19 @@ public abstract class InventoryUI : MonoBehaviour
             GameObject buttonObj = Instantiate(ItemButtonPrefab, ItemButtonParent);
             ItemButtonUI button = buttonObj.GetComponent<ItemButtonUI>();
             button.Setup(item, this);
+        }
+
+        if (selectedItem == null || (previousItem != null && previousItem != selectedItem))
+        {
+            if (Inventory.Items.Count != 0)
+            {
+                selectedItem = Inventory.Items[Inventory.Items.Count - 1];
+                ShowItemDetails(selectedItem);
+            }
+            else
+            {
+                SetPreviewWindowState(false);
+            }
         }
     }
 

@@ -12,10 +12,11 @@ public static class EquipUtils
         var HighestOverrideDef = HighestOverride(itemList, StatsToModify.DefendDice);
         var HighestOverrideAtk = HighestOverride(itemList, StatsToModify.AttackDice);
 
-            //first, apply the highest overwrite value currently equipped
+        //first, apply the highest overwrite value currently equipped
         var finalDefend = HighestOverrideDef > 0 ? HighestOverrideDef : character.CurrentDefendDice;
         var finalAttack = HighestOverrideAtk > 0 ? HighestOverrideAtk : character.CurrentAttackDice;
 
+        //then apply additive modifiers
         foreach (var item in itemList)
         {
             foreach (var modifier in item.StatModifiers)
