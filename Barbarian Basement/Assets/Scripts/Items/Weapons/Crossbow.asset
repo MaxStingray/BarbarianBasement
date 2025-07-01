@@ -16,6 +16,8 @@ MonoBehaviour:
   icon: {fileID: 21300000, guid: 22759baa0b68e624baaa53472f3f2ae1, type: 3}
   description: The crossbow allows you to roll 3 attack dice at range.
   OnPickupAudio: {fileID: 0}
+  Value: 350
+  SaleValue: 40
   AttackDice: 3
   Range: 0
   WeaponType: 1

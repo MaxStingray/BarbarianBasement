@@ -19,6 +19,8 @@ public class Player : CharacterSheet
     private Vignette vignette;
     private Coroutine hitEffectCoroutine;
 
+    public PlayerInventory PlayerInventory => (PlayerInventory)Inventory;
+
     public void UpdateName(string name)
     {
         characterName = name;

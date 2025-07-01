@@ -16,6 +16,8 @@ MonoBehaviour:
   icon: {fileID: 21300000, guid: e02bbbdeb2094304f958180547cd5664, type: 3}
   description: The broadsword allows you to roll 3 attack dice.
   OnPickupAudio: {fileID: 0}
+  Value: 250
+  SaleValue: 30
   AttackDice: 3
   Range: 0
   WeaponType: 0

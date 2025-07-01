@@ -29,11 +29,11 @@ public class ChestInventoryUI : InventoryUI
 
         if (selectedItem is Gold)
         {
-            GameManager.Instance.Player.Inventory.AddItem(selectedItem);
+            selectedItem.UseItem(GameManager.Instance.Player);
         }
         else
         {
-            selectedItem.UseItem(GameManager.Instance.Player);
+            GameManager.Instance.Player.Inventory.AddItem(selectedItem);
         }
 
         Inventory.RemoveItem(selectedItem);

@@ -17,6 +17,8 @@ MonoBehaviour:
   description: The battle axe allows you to roll 4 attack dice. You cannot use the
     battle axe if you have a shield equipped.
   OnPickupAudio: {fileID: 0}
+  Value: 400
+  SaleValue: 50
   AttackDice: 4
   Range: 0
   WeaponType: 0

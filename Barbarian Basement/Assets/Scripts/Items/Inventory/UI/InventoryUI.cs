@@ -71,10 +71,15 @@ public abstract class InventoryUI : MonoBehaviour
 
     public virtual void ShowItemDetails(Item item)
     {
-        if (selectedItem != null)
+        if (selectedItem is Gold)
         {
-            previousItem = selectedItem;
+            SetPreviewWindowState(false);
+            return;
         }
+        if (selectedItem != null)
+            {
+                previousItem = selectedItem;
+            }
         SetPreviewWindowState(true);
         selectedItem = item;
         nameText.text = item.itemName;

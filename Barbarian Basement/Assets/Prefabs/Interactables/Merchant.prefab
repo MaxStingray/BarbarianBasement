@@ -42,6 +42,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5283084610277752162}
   - component: {fileID: 3912138845909127563}
+  - component: {fileID: 3251195419589138847}
   m_Layer: 0
   m_Name: Merchant
   m_TagString: Untagged
@@ -77,6 +78,42 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e8b901b359d6b854cbeb65fef968c54d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  audioSource: {fileID: 0}
+  interactClip: {fileID: 0}
+  TileData:
+    Type: 0
+    Position: {x: 0, y: 0, z: 0}
+    x: 0
+    y: 0
+    IsFloor: 0
+    NorthWall: 1
+    SouthWall: 1
+    EastWall: 1
+    WestWall: 1
+    IsOccupied: 0
+    OccupiedByCharacter: {fileID: 0}
+    OccupiedByInteractable: {fileID: 0}
+  _inventory: {fileID: 3251195419589138847}
+--- !u!114 &3251195419589138847
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8116028131015531380}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 05ec0fd497eba1444b05fb6b0fc7f0d7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Gold: 0
+  Items: []
+  OnInventoryChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  OnInventoryChangeRefused:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1001 &7319436554261272773
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -85,6 +122,18 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 7378153810621977922}
     m_Modifications:
+    - target: {fileID: 5251107426523682287, guid: 6a3c3c37133b6ae4d9590995c8166d88, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.75
+      objectReference: {fileID: 0}
+    - target: {fileID: 5251107426523682287, guid: 6a3c3c37133b6ae4d9590995c8166d88, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.75
+      objectReference: {fileID: 0}
+    - target: {fileID: 5251107426523682287, guid: 6a3c3c37133b6ae4d9590995c8166d88, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.75
+      objectReference: {fileID: 0}
     - target: {fileID: 5251107426523682287, guid: 6a3c3c37133b6ae4d9590995c8166d88, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
