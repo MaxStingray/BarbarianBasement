@@ -32,4 +32,10 @@ public abstract class Inventory : MonoBehaviour
     {
         return Items.Contains(item);
     }
+
+    public virtual void AddGold(int amount)
+    {
+        Gold += amount;
+        OnInventoryChanged.Invoke();
+    }
 }

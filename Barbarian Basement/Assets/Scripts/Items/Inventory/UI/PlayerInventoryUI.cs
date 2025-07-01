@@ -1,3 +1,4 @@
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -16,6 +17,10 @@ public class PlayerInventoryUI : InventoryUI
 
     [SerializeField] private QuickMenu _quickMenu;
 
+    PlayerInventory PlayerInventory => (PlayerInventory)Inventory;
+
+    [SerializeField] private TextMeshProUGUI _goldText;
+
     void Awake()
     {
         _qmSlot1Button.onClick.AddListener(AssignToSlot1);
@@ -23,6 +28,12 @@ public class PlayerInventoryUI : InventoryUI
         _qmSlot3Button.onClick.AddListener(AssignToSlot3);
         AddToQuickMenuButton.onClick.AddListener(OnAddToQuickMenuClicked);
         EquipButton.onClick.AddListener(OnEquipButtonClicked);
+    }
+
+    public override void UpdateUI()
+    {
+        base.UpdateUI();
+        _goldText.text = $"Gold: {PlayerInventory.Gold}";
     }
 
     public override void ShowItemDetails(Item item)
@@ -46,6 +57,8 @@ public class PlayerInventoryUI : InventoryUI
     {
         base.SetPreviewWindowState(show);
 
+        if (!selectedItem) return;
+
         if (selectedItem is Consumable || selectedItem is Weapon)
         {
             _quickMenuWindow.SetActive(!show);
@@ -57,12 +70,14 @@ public class PlayerInventoryUI : InventoryUI
         if (selectedItem is Equipment equipment)
         {
             _equipUI.OnClickEquip(equipment);
+            SetPreviewWindowState(false);
         }
     }
 
     private void AssignToSlot1()
     {
-        _quickMenu.AssignButton1(selectedItem);
+        PlayerInventory.AddItemToQuickSlot(selectedItem);
+        _quickMenu.AssignButton1(selectedItem, PlayerInventory);
         GameManager.Instance.Player.Inventory.RemoveItem(selectedItem);
         ClearItemDetails();
         _quickMenuWindow.SetActive(false);
@@ -70,7 +85,8 @@ public class PlayerInventoryUI : InventoryUI
     }
     private void AssignToSlot2()
     {
-        _quickMenu.AssignButton2(selectedItem);
+        PlayerInventory.AddItemToQuickSlot(selectedItem);
+        _quickMenu.AssignButton2(selectedItem, PlayerInventory);
         GameManager.Instance.Player.Inventory.RemoveItem(selectedItem);
         ClearItemDetails();
         _quickMenuWindow.SetActive(false);
@@ -78,7 +94,8 @@ public class PlayerInventoryUI : InventoryUI
     }
     private void AssignToSlot3()
     {
-        _quickMenu.AssignButton3(selectedItem);
+        PlayerInventory.AddItemToQuickSlot(selectedItem);
+        _quickMenu.AssignButton3(selectedItem, PlayerInventory);
         GameManager.Instance.Player.Inventory.RemoveItem(selectedItem);
         ClearItemDetails();
         _quickMenuWindow.SetActive(false);

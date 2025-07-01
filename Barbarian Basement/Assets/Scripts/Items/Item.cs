@@ -8,6 +8,8 @@ public abstract class Item : ScriptableObject
     public Sprite icon;
     public string description;
     public AudioClip OnPickupAudio;
+    public int Value;
+    public int SaleValue;
 
     public virtual void UseItem(CharacterSheet characterSheet)
     {

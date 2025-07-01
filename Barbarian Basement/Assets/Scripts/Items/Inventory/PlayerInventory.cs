@@ -3,13 +3,25 @@ using UnityEngine;
 
 public class PlayerInventory : Inventory
 {
-    private List<Item> quickSlotItems;
+    private List<Item> quickSlotItems = new List<Item>();
 
     
     public void AddItemToQuickSlot(Item item)
     {
         RemoveItem(item);
         quickSlotItems.Add(item);
+    }
+
+    public void RemoveFromQuickSlot(Item item, bool used)
+    {
+        if (!quickSlotItems.Contains(item)) return;
+
+        quickSlotItems.Remove(item);
+
+        if (!used)
+        {
+            AddItem(item);
+        }
     }
 
     public void ClearQuickSlots()
@@ -21,7 +33,7 @@ public class PlayerInventory : Inventory
             AddItem(item);
         }
 
-        quickSlotItems.Clear(); 
+        quickSlotItems.Clear();
     }
 
     public override void AddItem(Item item)

@@ -31,6 +31,8 @@ public abstract class InventoryUI : MonoBehaviour
         {
             Inventory.OnInventoryChanged.AddListener(UpdateUI);
             UpdateUI();
+            selectedItem = null;
+            SetPreviewWindowState(false);
         }
     }
 

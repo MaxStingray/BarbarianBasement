@@ -16,7 +16,9 @@ MonoBehaviour:
   icon: {fileID: 21300000, guid: 429e2a82f3e32ad4a86527f7e2e6bbc6, type: 3}
   description: The helmet gives you one extra defend die.
   OnPickupAudio: {fileID: 0}
-  _statsToModify: 01000000
+  Value: 120
+  SaleValue: 10
+  _equipSlot: 0
   _statModifiers:
   - stat: 1
     modificationType: 0

@@ -18,9 +18,6 @@ public abstract class CharacterSheet : MonoBehaviour
     [SerializeField] protected string characterName;
 
     public string CharacterName => characterName;
-
-    public int CurrentGold { get; private set; }
-
     public Inventory Inventory;
 
     public EquipList EquipList;
@@ -193,10 +190,5 @@ public abstract class CharacterSheet : MonoBehaviour
         if (!audioSource) return;
 
         audioSource.PlayOneShot(clip);
-    }
-
-    public void AddGold(int amount)
-    {
-        CurrentGold += amount;
     }
 }

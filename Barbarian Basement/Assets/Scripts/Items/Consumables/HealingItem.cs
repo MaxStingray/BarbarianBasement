@@ -15,5 +15,10 @@ public class HealingItem : Consumable
         }
 
         characterSheet.CurrentBodyPoints = Mathf.Max(characterSheet.CurrentBodyPoints + healAmount, characterSheet.BodyPoints);
+
+        if (characterSheet is Player player)
+        {
+            GameManager.Instance.StatsPanel.UpdateStatsPanel(player);
+        }
     }
 }

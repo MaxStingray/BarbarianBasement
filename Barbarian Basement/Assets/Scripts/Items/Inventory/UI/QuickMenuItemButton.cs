@@ -5,20 +5,25 @@ public class QuickMenuItemButton : MonoBehaviour
 {
     private Item _assignedItem;
     [SerializeField] private Image _iconImage;
+    [SerializeField] private Sprite _defaultSprite;
 
     [SerializeField] private Button _button;
 
-    public void Assign(Item item)
+    private PlayerInventory _inventory;
+
+    public void Assign(Item item, PlayerInventory inventory)
     {
         _assignedItem = item;
         _iconImage.sprite = item.icon;
         _button.onClick.AddListener(OnClick);
+        _inventory = inventory;
     }
 
-    public void Unassign()
+    public void Unassign(bool used)
     {
-        _iconImage.sprite = null;
+        _iconImage.sprite = _defaultSprite;
         _button.onClick.RemoveAllListeners();
+        _inventory.RemoveFromQuickSlot(_assignedItem, used);
         _assignedItem = null;
     }
 
@@ -28,7 +33,12 @@ public class QuickMenuItemButton : MonoBehaviour
 
         if (_assignedItem is Consumable)
         {
-            Unassign();
+            Unassign(true);
+        }
+
+        if (_assignedItem is Weapon weapon && weapon.WeaponType == WeaponType.Throwable)
+        {
+            Unassign(true);
         }
     }
 }

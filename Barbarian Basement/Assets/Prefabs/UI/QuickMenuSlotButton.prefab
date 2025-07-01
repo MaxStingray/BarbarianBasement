@@ -271,4 +271,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _iconImage: {fileID: 277814766432565945}
+  _defaultSprite: {fileID: 21300000, guid: efdb8048295bdc74c8adc8b55d65c07a, type: 3}
   _button: {fileID: 8727994745150065307}

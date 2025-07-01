@@ -16,6 +16,8 @@ MonoBehaviour:
   icon: {fileID: 21300000, guid: 91877d25eee3df646bd66c9a8865dc84, type: 3}
   description: Chainmail allows you to roll 3 defend dice.
   OnPickupAudio: {fileID: 0}
+  Value: 450
+  SaleValue: 60
   _equipSlot: 1
   _statModifiers:
   - stat: 1

@@ -6,18 +6,18 @@ public class QuickMenu : MonoBehaviour
     [SerializeField] private QuickMenuItemButton _button2;
     [SerializeField] private QuickMenuItemButton _button3;
 
-    public void AssignButton1(Item item)
+    public void AssignButton1(Item item, PlayerInventory inventory)
     {
-        _button1.Assign(item);
+        _button1.Assign(item, inventory);
     }
 
-    public void AssignButton2(Item item)
+    public void AssignButton2(Item item, PlayerInventory inventory)
     {
-        _button2.Assign(item);
+        _button2.Assign(item, inventory);
     }
 
-    public void AssignButton3(Item item)
+    public void AssignButton3(Item item, PlayerInventory inventory)
     {
-        _button3.Assign(item);
+        _button3.Assign(item, inventory);
     }
 }
